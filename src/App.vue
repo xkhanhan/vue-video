@@ -1,75 +1,192 @@
 <template>
   <div id="app">
-      <xk-video  :src="require('./assets/【守望先锋】CG宣传片全收录_哔哩哔哩 (゜-゜)つロ 干杯~-bilibili - Google Chrome 2020-06-13 22-30-01.mp4')"></xk-video>
+    <xk-collapse v-model="active" accordion>
+      <xk-collapse-item title="一致性 Consistency" name="1">
+        <div>
+          与现实生活一致：与现实生活的流程、逻辑保持一致，遵循用户习惯的语言和概念；
+        </div>
+        <div>
+          在界面中一致：所有的元素和结构需保持一致，比如：设计样式、图标和文本、元素的位置等。
+        </div>
+      </xk-collapse-item>
+      <xk-collapse-item title="反馈 Feedback" name="2">
+        <div>
+          与现实生活一致：与现实生活的流程、逻辑保持一致，遵循用户习惯的语言和概念；
+        </div>
+        <div>
+          在界面中一致：所有的元素和结构需保持一致，比如：设计样式、图标和文本、元素的位置等。
+        </div>
+      </xk-collapse-item>
+      <xk-collapse-item title="效率 Efficiency" name="3">
+      
+        <div>
+          清晰明确：语言表达清晰且表意明确，让用户快速理解进而作出决策；
+        </div>
+        <div>
+          帮助用户识别：界面简单直白，让用户快速识别而非回忆，减少用户记忆负担。
+        </div>
+      </xk-collapse-item>
+    </xk-collapse>
+    <!-- <xk-video  :src="'xx'"></xk-video> -->
   </div>
 </template>
 
 <script>
-import xkVideo from './components/index';
+// import xkVideo from './components/index';
+import xkCollapse from "./components/collapse";
+import xkCollapseItem from "./components/collapseItem";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    xkVideo
+    // xkVideo
+    xkCollapse,
+    xkCollapseItem,
   },
-}
+  data() {
+    return {
+      active: ["1"],
+    };
+  },
+};
 </script>
 
 <style>
-    #app {
-        width: 638px;
-        height: 500px;
-        margin: 0 auto;
-    }
+#app {
+  width: 638px;
+  height: 500px;
+  margin: 0 auto;
+}
 
-    /**
+/**
  清除默认样式
  */
- /* v2.0 | 20110126
+/* v2.0 | 20110126
 http://meyerweb.com/eric/tools/css/reset/ 
 License: none (public domain)
 */
-html, body, div, span, applet, object, iframe,
-h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-a, abbr, acronym, address, big, cite, code,
-del, dfn, em, img, ins, kbd, q, s, samp,
-small, strike, strong, sub, sup, tt, var,
-b, u, i, center,
-dl, dt, dd, ol, ul, li,
-fieldset, form, label, legend,
-table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, embed, 
-figure, figcaption, footer, header, hgroup, 
-menu, nav, output, ruby, section, summary,
-time, mark, audio, video {
-margin: 0;
-padding: 0;
-border: 0;
-font-size: 100%;
-font: inherit;
-vertical-align: baseline;
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
 }
 /* HTML5 display-role reset for older browsers */
-article, aside, details, figcaption, figure, 
-footer, header, hgroup, menu, nav, section {
-display: block;
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+  display: block;
 }
 body {
-line-height: 1;
+  line-height: 1;
 }
-ol, ul {
-list-style: none;
+ol,
+ul {
+  list-style: none;
 }
-blockquote, q {
-quotes: none;
+blockquote,
+q {
+  quotes: none;
 }
-blockquote:before, blockquote:after,
-q:before, q:after {
-content: '';
-content: none;
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+  content: "";
+  content: none;
 }
 table {
-border-collapse: collapse;
-border-spacing: 0;
+  border-collapse: collapse;
+  border-spacing: 0;
 }
 </style>

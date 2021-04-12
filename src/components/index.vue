@@ -1,60 +1,64 @@
 <template>
-  <div class="video-content">
-    <!-- 头部视频信息 -->
-    <div class="video-header">
-      <div class="title">选奶救不了队友的亮眼表现_20-07-31_22-37-39</div>
-    </div>
-
-    <!-- 视频 -->
-    <video
-      @click="handleVideo"
-      width="95%"
-      ref="video"
-      autobuffer
-      :src="src"
-    ></video>
-
-    <!-- 进度条 -->
-    <div class="video-progress">
-      <xk-progress
-        :now="nowTime"
-        :all="allTime"
-        :buffer="buffer"
-        @chartChange="chartChange"
-      />
-    </div>
-
-    <!-- 控件 -->
-    <div class="video-control">
-      <div class="control-left">
-        <div
-          class="video-playAndpause iconfont"
-          :class="{ play: isPause, pause: isPlay }"
-          @click="handlPlay"
-        ></div>
-        <div class="video-next iconfont next"></div>
-        <div class="video-time">
-          <span> {{ formatNowTime }} </span>
-          /
-          <span> {{ formatAllTime }} </span>
-        </div>
+  <div>
+    <div class="video-content" ref="content">
+      <!-- 头部视频信息 -->
+      <div class="video-header">
+        <div class="title">选奶救不了队友的亮眼表现_20-07-31_22-37-39</div>
       </div>
-      <div class="control-right">
-        <div class="video-clarity">720p高清</div>
-        <div class="video-speed">倍速</div>
-        <div class="video-voice iconfont voice">
-          <div class="voice-content">
-            <xk-progress
-              :now="nowTime"
-              :all="allTime"
-              :buffer="buffer"
-              @chartChange="chartChange"
-            />
+
+      <!-- 视频 -->
+      <video
+        @click="handleVideo"
+        width="95%"
+        ref="video"
+        autobuffer
+        :src="src"
+      ></video>
+
+      <!-- 进度条 -->
+      <div class="video-progress">
+        <xk-progress
+          :now="nowTime"
+          :all="allTime"
+          :buffer="buffer"
+          @chartChange="videoChartChange"
+        />
+      </div>
+
+      <!-- 控件 -->
+      <div class="video-control">
+        <div class="control-left">
+          <div
+            class="video-playAndpause iconfont"
+            :class="{ play: isPause, pause: isPlay }"
+            @click="handlPlay"
+          ></div>
+          <div class="video-next iconfont next"></div>
+          <div class="video-time">
+            <span> {{ formatNowTime }} </span>
+            /
+            <span> {{ formatAllTime }} </span>
           </div>
         </div>
-        <div class="video-sitting iconfont sitting"></div>
-        <div class="video-screen iconfont screen"></div>
+        <div class="control-right">
+          <div class="video-clarity">720p高清</div>
+          <div class="video-speed">倍速</div>
+          <div class="video-voice">
+            <div class="iconfont voice" @click="handleVoice"></div>
+            <xk-progress
+              :now="nowVoice"
+              :all="allVoice"
+              @chartChange="voiceChartChange"
+            />
+          </div>
+          <div class="video-sitting iconfont sitting"></div>
+          <div class="video-screen iconfont screen" @click="handleScreen"></div>
+        </div>
       </div>
+    </div>
+
+    <div class="list-content">
+      <!-- 列表 -->
     </div>
   </div>
 </template>
@@ -82,11 +86,16 @@ export default {
       isPlay: false, // 是否播放状态
 
       nowTime: 0, // 视频当前时间
-      allTime: 0, // 视频总时间
+      allTime: 150, // 视频总时间
       buffer: 0, // 缓存
 
-      nowVoice: 0, // 当前音量
+      oldVoice: 1, // 上一次音量
+      nowVoice: 1, // 当前音量
       allVoice: 1, // 总音量
+      isMute: false, // 是否静音
+
+      content_dom: null, // 容器
+      isScreen: false, // 是否全屏
     };
   },
   /**
@@ -94,8 +103,10 @@ export default {
    */
   mounted() {
     const video_dom = this.$refs.video; // 获取视频元素
+    const content_dom = this.$refs.content; // 获取容器
 
     this.video_dom = video_dom;
+    this.content_dom = content_dom;
 
     new Promise((resolve) => {
       /**
@@ -125,7 +136,6 @@ export default {
        * 当视频结束播放对播放按钮进行改变
        */
       video_dom.addEventListener("ended", () => {
-        // this.handlPlay();
         this.isPlay = false;
       });
     });
@@ -197,10 +207,52 @@ export default {
       return minutes + ":" + seconds; // xx：xx
     },
 
-    chartChange(e) {
-      e = Math.floor(e);
-      this.nowTime = e;
-      this.video_dom.currentTime = e;
+    /**
+     * 改变当前进度
+     * 该函数由子组件 progress 触发
+     */
+    videoChartChange(e) {
+      this.nowTime = e; // 改变当前进度数据
+      this.video_dom.currentTime = e; // 改变视频进度
+    },
+
+    /**
+     * 改变当前音量
+     * 该函数由子组件 progress 触发
+     */
+    voiceChartChange(e) {
+      this.nowVoice = e;
+    },
+
+    /**
+     * 点击音量图标时
+     */
+    handleVoice() {
+      const { isMute } = this;
+
+      if (!isMute) {
+        this.oldVoice = this.nowVoice; // 暂存当前音量
+        this.nowVoice = 0; // 静音
+      } else {
+        this.nowVoice = this.oldVoice; // 返回上次音量
+      }
+
+      this.isMute = !isMute; // 状态改变
+    },
+
+    /**
+     * 全屏按钮
+     */
+    handleScreen() {
+      const { content_dom, isScreen } = this;
+
+      if (!isScreen) {
+        // 不是全屏模式
+        content_dom.requestFullscreen(); // 进入全屏
+      } else {
+        document.exitFullscreen(); // 退出全屏
+      }
+      this.isScreen = !this.isScreen; // 该变值
     },
   },
 };
@@ -310,13 +362,17 @@ export default {
   width: 15px;
   height: 15px;
 }
-.video-voice{
-  position: relative;
+.video-voice {
+  width: 100px;
+}
+.video-voice .iconfont::before {
+  margin: 0 10px 0 0;
+}
+.video-sitting {
+  transition: all 0.6s;
 }
 
-.voice-content{
-  height: 100px;
-  position: absolute;
-  width: 50px;
+.video-sitting:hover {
+  transform: rotateZ(180deg);
 }
 </style>

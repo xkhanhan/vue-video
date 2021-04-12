@@ -143,11 +143,22 @@ export default {
       document.addEventListener("mouseup", () => {
         document.onmousemove = null;
       });
-
     },
 
     /**
-     * 改变按钮位置
+     * 背景点击事件
+     */
+    bgClick(e) {
+      if (e.target == this.chartProgress_dom) return;
+
+      const target_left = e.target.getBoundingClientRect().left;
+      const mouse_left = e.clientX;
+
+      this.changChartLeft(mouse_left - target_left); // 调用触发父级事件
+    },
+
+    /**
+     * 触发父级事件
      */
     changChartLeft(number) {
       const { bgProgress_width, all } = this;
@@ -158,30 +169,16 @@ export default {
       } else if (number > 1) {
         number = 1;
       }
+
       number = number * all;
       this.$emit("chartChange", number);
-
     },
-
-    /**
-     * 背景点击事件
-     */
-    bgClick (e) {   
-      if(e.target == this.chartProgress_dom) return;
-
-      const target_left = e.target.getBoundingClientRect().left;  
-      const mouse_left = e.clientX;
-      this.changChartLeft(mouse_left - target_left);
-    }
-
-
-
   },
 };
 </script>
 
 <style scoped>
-.progress-bg{
+.progress-bg {
   display: flex;
   align-items: center;
   border-radius: 20px;
@@ -191,7 +188,6 @@ export default {
   background: rgba(255, 255, 255, 0.2);
   cursor: pointer;
 }
-
 
 .progress-bg .progeress-chart {
   left: 30%;
