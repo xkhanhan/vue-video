@@ -6,7 +6,10 @@
         <slot name="header" />
       </span>
     </div>
-    <div class="collapse-item-body" :style="{ height: nowHeight + 'px' }">
+    <div
+      class="collapse-item-body"
+      :style="{ height: { nowHeight: isFlod, 0: !isFlod } }"
+    >
       <div ref="body">
         <slot />
         <slot name="body" />
@@ -17,7 +20,7 @@
 
 <script>
 export default {
-  name : "xkCollapseItem",
+  name: "xkCollapseItem",
   props: {
     title: {
       // 折叠面板头部标题
@@ -28,44 +31,51 @@ export default {
       type: String,
     },
   },
-  inject: ["activeList", "accoraion"], // 接收父级传来的值
   data() {
     return {
       nowHeight: 0, // 当前高度
       bodyHeight: 0, // 父级高度
       bodyDom: null, // 父级元素
-      isFlod: false, // 是否折叠
+      activeList: this.$store.state.collapse.activeList,
     };
   },
   mounted() {
     this.bodyDom = this.$refs.body;
     this.bodyHeight = this.bodyDom.offsetHeight;
     this.nowHeight = this.bodyHeight;
-
-    /**
-     * 当前面板并未选中，改变 isFlod 值，触发监听事件，进行折叠 
-     */
-    if (this.activeList.indexOf(this.name) == -1) {
-      this.isFlod = true;
-    }
+  },
+  computed: {
+    isFlod() {
+      const is = this.inlist(this.name, this.activeList);
+      if (is) {
+        // 需要展开
+        this.nowHeight = this.bodyHeight + "px";
+      } 
+      return is;
+    },
   },
   methods: {
+    inlist(name, list) {
+      return list.indexOf(name) != -1;
+    },
+
     /**
      * 点击头部折叠面板
      */
     handleClick() {
-      this.isFlod = !this.isFlod;
-      const { activeList, name, accoraion} = this;
+      const { name, accoraion } = this;
+
+      let list = [...this.activeList];
 
       /**
        *  根据父级 collapse 传来的 accoraion 判断是否开启手风琴模式
        */
-      if(accoraion) {
-        this.pushAndShift(activeList, name);
+      if (accoraion) {
+        this.pushAndShift(list, name);
       } else {
-        this.addAndDelete(activeList, name);
+        this.addAndDelete(list, name);
       }
-      
+      this.$store.commit("activeList", list); // 提交commit
     },
 
     /**
@@ -87,38 +97,15 @@ export default {
      * 手风琴模式下,父级 activeList 添加元素方式
      */
     pushAndShift(activeList, name) {
+      console.log("x");
       activeList.shift(); // 弹出原先的
-      activeList.push(name);// 压入当前
+      activeList.push(name); // 压入当前
     },
 
     /**
      * 展示和隐藏面板
      */
-    showCollapse() {
-      if (this.isFlod) { // 需要折叠
-        this.nowHeight = 0;
-      } else { // 需要展开
-        this.nowHeight = this.bodyHeight;
-      }
-    },
-  },
-  watch: {
-    /**
-     * 监听 activeList 的变化
-     * 当前面板在数组中时进行展开
-     */
-    activeList() {
-      if (this.activeList.indexOf(this.name) == -1) {
-        this.isFlod = true;
-      }
-    },
-
-    /**
-     * 折叠面板
-     */
-    isFlod () {
-      this.showCollapse();
-    }
+    showCollapse() {},
   },
 };
 </script>

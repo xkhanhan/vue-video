@@ -7,7 +7,7 @@
 <script>
 
 export default {
-  name : 'xkCollpase',
+  name : 'xkCollapse',
   props: {
     accordion: {
       // 是否手风琴模式
@@ -15,20 +15,11 @@ export default {
       default: false,
     },
   },
-  provide(){
-    return {
-      activeList : this.$attrs.value,
-      accoraion : this.accordion,
-    }
+  created() {
+    this.$store.commit('accordion', this.accordion); // 初始提交
+    console.log(this.$attrs.value);
+    this.$store.commit('activeList', this.$attrs.value);
   },
-  watch : {
-    /**
-     * 当 activeList 改变时， 改变父级绑定的值
-     */
-    activeList () {
-      this.$listeners.input();
-    }
-  }
 };
 </script>
 
