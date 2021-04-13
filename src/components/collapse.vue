@@ -14,8 +14,20 @@ export default {
       default: false,
     },
   },
-  mounted() {
+  provide(){
+    return {
+      activeList : this.$attrs.value,
+      accoraion : this.accordion,
+    }
   },
+  watch : {
+    /**
+     * 当 activeList 改变时， 改变父级绑定的值
+     */
+    activeList () {
+      this.$listeners.input();
+    }
+  }
 };
 </script>
 

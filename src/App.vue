@@ -27,6 +27,7 @@
         </div>
       </xk-collapse-item>
     </xk-collapse>
+
     <!-- <xk-video  :src="'xx'"></xk-video> -->
   </div>
 </template>
