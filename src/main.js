@@ -1,14 +1,13 @@
 import Vue from 'vue'
 import App from './App.vue'
-import axios from 'axios';
-import VueAxios from 'vue-axios'
+import xkUI from './components/index';
+import store from './Vuex/index';
 
-import store from './script/store';
 
-Vue.use(VueAxios, axios)
+Vue.use(xkUI);
 Vue.config.productionTip = false
 
 new Vue({
-    store,
     render: h => h(App),
+    store
 }).$mount('#app')

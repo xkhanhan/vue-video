@@ -25,6 +25,7 @@
 
 <script>
 export default {
+  name : 'xkProgress',
   props: {
     /**
      * 是否展示缓存
@@ -171,7 +172,7 @@ export default {
       }
 
       number = number * all;
-      this.$emit("chartChange", number);
+      this.$emit("change", number);
     },
   },
 };

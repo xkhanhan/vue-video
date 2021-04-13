@@ -1,28 +1,12 @@
-<<<<<<< HEAD
-# vue-video
-=======
 # movie-vue
 
-## Project setup
-```
-npm install
-```
+## components
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+1. video
 
-### Compiles and minifies for production
-```
-npm run build
-```
+| 必填 |  参数   |     说明     |  类型  | 默认值 | 可选值 |
+| ---- | :-----: | :----------: | :----: | :----: | :----: |
+| 否   |   src   | 单个视频路径 | String |   -    |   -    |
+| 否   | srcList | 视频路径数组 | Array  |   -    |   -    |
+|      |         |              |        |        |        |
 
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
->>>>>>> first

@@ -7,6 +7,7 @@
 <script>
 
 export default {
+  name : 'xkCollpase',
   props: {
     accordion: {
       // 是否手风琴模式

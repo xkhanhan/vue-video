@@ -17,6 +17,7 @@
 
 <script>
 export default {
+  name : "xkCollapseItem",
   props: {
     title: {
       // 折叠面板头部标题
