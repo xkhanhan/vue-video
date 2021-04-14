@@ -28,15 +28,19 @@
       </xk-collapse-item>
     </xk-collapse>
 
-    <!-- <xk-video  :src="'xx'"></xk-video> -->
+    
+    <!-- <xk-video  :src="'xx'">
+      <xk-progress ></xk-progress>
+      <xk-control></xk-control>
+    </xk-video> -->
   </div>
 </template>
 
 <script>
-
-
 export default {
   name: "App",
+  components: {
+  },
   data() {
     return {
       active: ["1"],

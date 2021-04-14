@@ -38,6 +38,7 @@ export default {
       store : this.$store,
     };
   },
+ 
   computed: {
     /**
      * 格式化的总时间

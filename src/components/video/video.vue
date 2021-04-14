@@ -3,7 +3,7 @@
     <div class="video-content" ref="content">
       <!-- 头部视频信息 -->
       <div class="video-header">
-        <div class="title">选奶救不了队友的亮眼表现_20-07-31_22-37-39</div>
+        <div class="title">{{title}}-07-31_22-37-39</div>
       </div>
 
       <!-- 视频 -->
@@ -17,16 +17,12 @@
 
       <!-- 进度条 -->
       <div class="video-progress">
-        <xk-progress
-          :now="$store.state.video.nowTime"
-          :all="$store.state.video.allTime"
-          :buffer="$store.state.video.buffer"
-          @change="changeProgress"
-        />
+        <slot :now="$store.state.video.nowTime"
+          :all="$store.state.video.allTime" name="progress" />
       </div>
 
       <!-- 控件 -->
-      <xk-control/>
+      <slot name="control" />
     </div>
 
     <div class="list-content" v-if="$store.state.video.isList">
@@ -36,13 +32,9 @@
 </template>
 
 <script>
-import xkControl from "./components/control";
 
 export default {
   name: "xkVideo",
-  components: {
-    xkControl,
-  },
   props: {
     /**
      * 视频播放路径
@@ -54,17 +46,20 @@ export default {
     srcList: {
       type: Array,
     },
+    title: {
+      type: String,
+    },
   },
   created() {
     const { src, srcList } = this;
     if (src == null && srcList == null) throw Error("请传入视频路径"); // 两个都没有传入报错
 
     if (src) {
-      this.store.commit('videoSrc', src);// 传入 src
+      this.store.commit("videoSrc", src); // 传入 src
     } else {
-      this.store.commit('videoSrc', srcList[this.state.index]);
+      this.store.commit("videoSrc", srcList[this.state.index]);
       if (srcList.length > 1) {
-        this.store.commit('isList', true);// 当视频路径数组长度大于1时,渲染下一个按钮和视频列表
+        this.store.commit("isList", true); // 当视频路径数组长度大于1时,渲染下一个按钮和视频列表
       }
     }
   },
@@ -72,7 +67,7 @@ export default {
     const store = this.$store;
     return {
       store,
-      state : store.state.video
+      state: store.state.video,
     };
   },
   /**
@@ -90,11 +85,11 @@ export default {
        * 当视频加载完成，对总时间进行赋值
        */
       videoDom.addEventListener("loadeddata", () => {
-        this.store.commit('allTime', videoDom.duration) // 赋值总时间
+        this.store.commit("allTime", videoDom.duration); // 赋值总时间
 
         // this.buffer = video_dom.buffered.length * this.allTime;
 
-        this.store.commit('nowVoice', videoDom.volume)
+        this.store.commit("nowVoice", videoDom.volume);
 
         resolve();
       });
@@ -103,7 +98,7 @@ export default {
        * 对视频播放进行监听并改变当前时间
        */
       videoDom.addEventListener("timeupdate", () => {
-        this.store.commit('nowTime', videoDom.currentTime) // 赋值当前时间
+        this.store.commit("nowTime", videoDom.currentTime); // 赋值当前时间
 
         // this.buffer = video_dom.buffered.length * this.allTime;
       });
@@ -116,7 +111,7 @@ export default {
        * 当视频结束播放对播放按钮进行改变
        */
       videoDom.addEventListener("ended", () => {
-        this.store.commit('isPlay', false);
+        this.store.commit("isPlay", false);
       });
     });
   },
@@ -126,13 +121,14 @@ export default {
      * 点击视频时
      */
     handleVideo() {
-        const is = this.store.state.video.isPlay;
-        this.store.commit('isPlay', !is);
+      const is = this.store.state.video.isPlay;
+      this.store.commit("isPlay", !is);
+      this.$emit("clickPlay", this.store.state.video.videoDom);
     },
 
     changeProgress(e) {
-      this.store.commit('nowTime', e);
-    }
+      this.store.commit("nowTime", e);
+    },
   },
 };
 </script>

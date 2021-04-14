@@ -14,6 +14,11 @@ export default {
       default: false,
     },
   },
+  data () {
+    return {
+      activeList : [].concat(this.value)
+    }
+  },
   created() {
     const { accordion, $attrs } = this;
     if(!$attrs.value) throw new Error('请绑定选中的面板')
@@ -21,9 +26,9 @@ export default {
       if ($attrs.value.length != 1) {
         throw new Error("错误此模式为手风琴模式，选中的元素必须为一个");
       } else {
-        // 初始提交
-        this.$store.commit("accordion", this.accordion);
-        this.$store.commit("activeList", this.$attrs.value);
+        // // 初始提交
+        // this.$store.commit("accordion", this.accordion);
+        // this.$store.commit("activeList", this.$attrs.value);
       }
     }
   },
