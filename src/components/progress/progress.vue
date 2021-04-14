@@ -56,6 +56,9 @@ export default {
       default: 0,
     },
   },
+  created() {
+    if(this.now > this.all) throw new Error('当前值不允许大于总值')
+  },
   data() {
     return {
       nowProgress_dom: null, // 进度条元素
