@@ -5,9 +5,8 @@
 </template>
 
 <script>
-
 export default {
-  name : 'xkCollapse',
+  name: "xkCollapse",
   props: {
     accordion: {
       // 是否手风琴模式
@@ -16,9 +15,17 @@ export default {
     },
   },
   created() {
-    this.$store.commit('accordion', this.accordion); // 初始提交
-    console.log(this.$attrs.value);
-    this.$store.commit('activeList', this.$attrs.value);
+    const { accordion, $attrs } = this;
+    if(!$attrs.value) throw new Error('请绑定选中的面板')
+    if (accordion) {
+      if ($attrs.value.length != 1) {
+        throw new Error("错误此模式为手风琴模式，选中的元素必须为一个");
+      } else {
+        // 初始提交
+        this.$store.commit("accordion", this.accordion);
+        this.$store.commit("activeList", this.$attrs.value);
+      }
+    }
   },
 };
 </script>
