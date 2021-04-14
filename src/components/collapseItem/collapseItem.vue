@@ -6,10 +6,7 @@
         <slot name="header" />
       </span>
     </div>
-    <div
-      class="collapse-item-body"
-      :style="{ height: { nowHeight: isFlod, 0: !isFlod } }"
-    >
+    <div class="collapse-item-body" :style="{ height: nowHeight + 'px' }">
       <div ref="body">
         <slot />
         <slot name="body" />
@@ -29,6 +26,7 @@ export default {
     },
     name: {
       type: String,
+      required : true
     },
   },
   data() {
@@ -36,76 +34,49 @@ export default {
       nowHeight: 0, // 当前高度
       bodyHeight: 0, // 父级高度
       bodyDom: null, // 父级元素
-      activeList: this.$store.state.collapse.activeList,
     };
   },
   mounted() {
     this.bodyDom = this.$refs.body;
     this.bodyHeight = this.bodyDom.offsetHeight;
     this.nowHeight = this.bodyHeight;
-  },
-  computed: {
-    isFlod() {
-      const is = this.inlist(this.name, this.activeList);
-      if (is) {
-        // 需要展开
-        this.nowHeight = this.bodyHeight + "px";
-      } 
-      return is;
-    },
+
+    this.flod(this.name, this.$store.state.collapse.activeList);
   },
   methods: {
-    inlist(name, list) {
-      return list.indexOf(name) != -1;
-    },
-
     /**
      * 点击头部折叠面板
      */
     handleClick() {
-      const { name, accoraion } = this;
-
-      let list = [...this.activeList];
-
-      /**
-       *  根据父级 collapse 传来的 accoraion 判断是否开启手风琴模式
-       */
-      if (accoraion) {
-        this.pushAndShift(list, name);
-      } else {
-        this.addAndDelete(list, name);
+      this.$store.commit("activeValue", this.name); // 提交commit
+    },
+    
+    flod(value, list) {
+       const is = this.isIn(value, list); // 是否需要折叠
+      if(is) { // 在数组中需要展示
+        this.show(list);
+      } else { // 不在数组中折叠起来
+        this.hide(list);
       }
-      this.$store.commit("activeList", list); // 提交commit
+        this.$emit('change', list)
     },
 
-    /**
-     * 非手风琴模式下,父级 activeList 添加元素方式
-     */
-    addAndDelete(activeList, name) {
-      const index = activeList.indexOf(name); // 获取当前name 的值在数组中的下标
-
-      if (index == -1) {
-        // 当此时并未展开而点击时，向数组中添加此项
-        activeList.push(name);
-      } else {
-        // 当此时展开点击时，向数组中删除此项
-        activeList.splice(index, 1);
-      }
+    show(list){
+      this.nowHeight = this.bodyHeight;
+      this.$emit('show', list);// 回调
     },
-
-    /**
-     * 手风琴模式下,父级 activeList 添加元素方式
-     */
-    pushAndShift(activeList, name) {
-      console.log("x");
-      activeList.shift(); // 弹出原先的
-      activeList.push(name); // 压入当前
+    hide(list){
+      this.nowHeight = 0;
+      this.$emit('hide', list);// 回调
     },
-
-    /**
-     * 展示和隐藏面板
-     */
-    showCollapse() {},
+    isIn(value, list){
+      return list.indexOf(value) != -1;
+    }
+  },
+  watch: {
+    "$store.state.collapse.activeList"() {
+        this.flod(this.name, this.$store.state.collapse.activeList);
+    },
   },
 };
 </script>
