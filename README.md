@@ -54,8 +54,6 @@ Vue.use(xkUI);
 |  否  |    now     |     当前进度     | Number  |   0    |      -       |
 |  否  |   buffer   |     缓冲进度     | Number  |   0    |      -       |
 |  否  | showBuffer | 是否展示缓冲进度 | Boolean | false  | false / true |
-|      |            |                  |         |        |              |
-|      |            |                  |         |        |              |
 
 
 
@@ -64,22 +62,8 @@ Vue.use(xkUI);
 | 事件名 | 说明           | 参数                                         |
 | ------ | -------------- | -------------------------------------------- |
 | change | 进度改变时触发 | 当前进度(组件内部已做出处理，你只需赋值即可) |
-|        |                |                                              |
-|        |                |                                              |
 
 
-
-### video
-
-1. video 属性
-
-| 必填 |  参数   |              说明               |  类型  | 默认值 | 可选值 |
-| :--: | :-----: | :-----------------------------: | :----: | :----: | :----: |
-|  否  |   src   | 单个视频路径(优先级高于srcList) | String |   -    |   -    |
-|  否  | srcList |          视频路径数组           | Array  |   -    |   -    |
-|      |         |                                 |        |        |        |
-
-2. 事件
 
 ### collapse
 
@@ -167,7 +151,102 @@ Vue.use(xkUI);
 
 | 事件名 |        说明        |        参数        |
 | :----: | :----------------: | :----------------: |
-|  show  |   面板展示时触发   | activeList : Array |
-|  hide  |   面板收起时触发   | activeList : Array |
 | change | 面板状态改变时触发 | activeList : Array |
+
+### video
+
+#### 用法
+
+1. 基本用法
+
+``` vue
+<template>
+	<xk-video :srcList="srcList">
+    </xk-video>
+</template>
+
+<script>
+	export default {
+		data() {
+			return {
+				srcList : [
+                   {
+                       src : 'http://xxxx'
+                       title : 'xxxx',
+                       barrage: [
+                      	 {usre : 'xxx', title : 'xxxx', date : 2331321332}
+                	  ]
+                   }   
+                 ]
+            }
+        }
+    }
+</script>
+```
+
+2. 对不同用户做出视频播放和控件处理
+
+``` vue
+<template>
+	<xk-video :srcList="srcList">
+    </xk-video>
+</template>
+
+<script>
+	export default {
+		data() {
+			return {
+				srcList : [
+                   {
+                       src : 'http://xxxx'
+                       title : 'xxxx',
+                       token : true, // 需要对用户验证
+                       barrage: [
+                      	 {usre : 'xxx', title : 'xxxx', date : 2331321332}
+                	  ]
+                   }   
+                 ]
+            }
+        }
+    }
+</script>
+```
+
+
+
+#### 属性
+
+1. video 属性
+
+| 必填 |  参数   |     说明     | 类型  | 默认值 | 可选值 |
+| :--: | :-----: | :----------: | :---: | :----: | :----: |
+|  是  | srcList | 视频路径数组 | Array |   -    |   -    |
+|      |         |              |       |        |        |
+
+2. srcList 属性
+
+| 必填 |  参数   |         说明         |  类型   | 默认值 | 可选值 |
+| :--: | :-----: | :------------------: | :-----: | :----: | :----: |
+|  是  |   src   |       视频路径       | String  |   -    |   -    |
+|  是  |  title  |     视频头部信息     | String  |   -    |   -    |
+|  否  |  token  | 是否需要做出验证处理 | Boolean |   -    |   -    |
+|  否  | barrage |       弹幕信息       |  Array  |   -    |   -    |
+
+3. barrage 属性
+
+| 必填 | 参数 | 说明 | 类型 | 默认值 | 可选值 |
+| ---- | ---- | ---- | ---- | ------ | ------ |
+|      |      |      |      |        |        |
+|      |      |      |      |        |        |
+|      |      |      |      |        |        |
+
+
+
+#### 事件
+
+| 事件名   | 说明                                              | 参数            |
+| -------- | ------------------------------------------------- | --------------- |
+| play     | 有验证时，改变播放按钮的回调, 此方法必须调用 next | next : function |
+| progress | 有验证时，改变进度条的回调, 此方法必须调用 next   | next : function |
+|          |                                                   |                 |
 
