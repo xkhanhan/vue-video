@@ -15,26 +15,19 @@
         :src="videoSrc"
       ></video>
 
-      <!-- 进度条 -->
-      <div class="video-progress">
-        <xk-progress :now="nowTime" :all="allTime" @change="changeProgress" />
-      </div>
-
       <!-- 控件 -->
-      <xk-control></xk-control>
+      <xk-control class="control-content" :token="token"></xk-control>
     </div>
   </div>
 </template>
 
 <script>
 import xkControl from "../control/index";
-import xkProgress from "../progress/index";
 
 export default {
   name: "xkVideo",
   components: {
     xkControl,
-    xkProgress,
   },
   props: {
     /**
@@ -57,7 +50,7 @@ export default {
       videoDom: null, // video 标签
 
       nowTime: 0, // 视频当前时间
-      allTime: 0, // 视频总时间
+      allTime: 10, // 视频总时间
       buffer: 0, // 缓存
 
       nowVoice: 1, // 当前音量
@@ -124,8 +117,16 @@ export default {
     isNext() {
       return this.srcList.length > 1;
     },
+    token() {
+      return this.srcList[this.index].token
+    }
   },
   methods: {
+    validation(name, callckName, e){
+        this.$emit(name, () => {
+          this[callckName](e);
+        });
+    },
     handlePlay() {
       if (this.allTime == 0) return;
 
@@ -160,7 +161,6 @@ export default {
 
       this.index++;
     },
-
     changeVoice(e) {
       this.nowVoice = e;
       this.videoDom.volume = e;
@@ -208,31 +208,14 @@ export default {
   white-space: nowrap;
 }
 
-/**
-    进度条
-*/
-.video-progress {
-  position: absolute;
-  left: 0;
-  bottom: 42px;
-  width: 100%;
-  height: 16px;
-  box-sizing: border-box;
-  padding: 0 10px;
-  display: flex;
-  align-items: center;
-}
-
 .video-header,
-.video-control,
-.video-progress {
-  opacity: 1;
+.control-content {
+  opacity: 0;
   transition: 0.3s;
 }
 
-.video-content:hover .video-control,
 .video-content:hover .video-header,
-.video-content:hover .video-progress {
+.video-content:hover .control-content {
   opacity: 1;
 }
 
