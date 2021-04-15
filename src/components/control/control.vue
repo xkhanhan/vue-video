@@ -3,10 +3,17 @@
     <div class="control-left">
       <div
         class="video-playAndpause iconfont"
-        :class="{ play: !$store.state.video.isPlay, pause: $store.state.video.isPlay }"
-        @click="handlPlay"
+        :class="{
+          play: video.isPlay,
+          pause: !video.isPlay,
+        }"
+        @click="handlePlay"
       ></div>
-      <div v-if="$store.state.video.isList" class="video-next iconfont next"></div>
+      <div
+        v-if="video.isNext"
+        class="video-next iconfont next"
+        @click="handleNext"
+      ></div>
       <div class="video-time">
         <span> {{ formatNowTime }} </span>
         /
@@ -19,8 +26,8 @@
       <div class="video-voice">
         <div class="iconfont voice" @click="handleVoice"></div>
         <xk-progress
-          :now="$store.state.video.nowVoice"
-          :all="$store.state.video.allVoice"
+          :now="video.nowVoice"
+          :all="video.allVoice"
           @change="changeVoice"
         />
       </div>
@@ -32,20 +39,18 @@
 
 <script>
 export default {
-  name : 'xkControl',
+  name: "xkControl",
   data() {
-    return {
-      store : this.$store,
-    };
+    return {};
   },
- 
+  inject: ["video"],
   computed: {
     /**
      * 格式化的总时间
      *  @return {String} xx:xx
      */
     formatAllTime() {
-      const allTime = this.store.state.video.allTime;
+      const allTime = this.video.allTime;
       return this.formatNumber(allTime);
     },
 
@@ -54,7 +59,7 @@ export default {
      * @return {String} xx:xx
      */
     formatNowTime() {
-      const nowTime = this.store.state.video.nowTime;
+      const nowTime = this.video.nowTime;
       return this.formatNumber(nowTime);
     },
   },
@@ -62,34 +67,34 @@ export default {
     /**
      * 播放按钮
      */
-    handlPlay() {
-      const is = this.$store.state.video.isPlay;
-      this.store.commit("isPlay", !is); // 改变播放按钮图标
+    handlePlay() {
+      this.video.handlePlay();
     },
 
     /**
      * 点击音量图标时
      */
     handleVoice() {
-      const { isMute } = this;
-
-      if (!isMute) {
-        this.oldVoice = this.nowVoice; // 暂存当前音量
-        this.nowVoice = 0; // 静音
-      } else {
-        this.nowVoice = this.oldVoice; // 返回上次音量
-      }
-
-      this.isMute = !isMute; // 状态改变
+      this.video.handleVoice();
     },
 
     /**
      * 全屏按钮
      */
     handleScreen() {
-      // this.handlScreenParent();
-      const is = this.store.state.video.isScreen;
-      this.store.commit('isScreen', !is);
+      this.video.handleScreen();
+    },
+
+    handleNext() {
+      this.video.handleNext();
+    },
+
+    /**
+     * 改变当前音量
+     * 该函数由子组件 progress 触发
+     */
+    changeVoice(e) {
+      this.video.changeVoice(e);
     },
 
     /**
@@ -108,14 +113,6 @@ export default {
       seconds = seconds >= 10 ? seconds : "0" + seconds;
 
       return minutes + ":" + seconds; // xx：xx
-    },
-
-    /**
-     * 改变当前音量
-     * 该函数由子组件 progress 触发
-     */
-    changeVoice(e) {
-      this.store.commit("nowVoice", e);
     },
   },
 };
