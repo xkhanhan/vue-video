@@ -25,8 +25,9 @@ export default {
       default: "暂无头部信息",
     },
     name: {
+      // 面板唯一值
       type: String,
-      required : true
+      required: true,
     },
   },
   data() {
@@ -36,46 +37,55 @@ export default {
       bodyDom: null, // 父级元素
     };
   },
+  inject: ["collapse"],
   mounted() {
     this.bodyDom = this.$refs.body;
     this.bodyHeight = this.bodyDom.offsetHeight;
     this.nowHeight = this.bodyHeight;
-
-    this.flod(this.name, this.$store.state.collapse.activeList);
+    this.flod(this.name, this.collapse.activeList);
   },
   methods: {
     /**
-     * 点击头部折叠面板
+     * 点击头部折叠面板方法
+     * 触发父级事件 click-item, 并传入当前面板的 name 
      */
     handleClick() {
-      this.$store.commit("activeValue", this.name); // 提交commit
-    },
-    
-    flod(value, list) {
-       const is = this.isIn(value, list); // 是否需要折叠
-      if(is) { // 在数组中需要展示
-        this.show(list);
-      } else { // 不在数组中折叠起来
-        this.hide(list);
-      }
-        this.$emit('change', list)
+      this.collapse.$emit("click-item", this.name); // 触发父级事件
     },
 
-    show(list){
+    /**
+     * 展示与隐藏方法
+     * @param { String/Nmber } name 当前面板的 name
+     * @param { Array } list 存放选中的面板数组，改值在父级
+     */
+    flod(name, list) {
+      console.log(name, list);
+      const is = this.isIn(name, list);
+      if (is) {
+        this.show();
+      } else {
+        this.hide();
+      }
+    },
+
+    /**
+     * @param { Array } list 存放选中的面板数组，改值在父级
+     */
+    show() {
       this.nowHeight = this.bodyHeight;
-      this.$emit('show', list);// 回调
     },
-    hide(list){
+
+    hide() {
       this.nowHeight = 0;
-      this.$emit('hide', list);// 回调
     },
-    isIn(value, list){
+
+    isIn(value, list) {
       return list.indexOf(value) != -1;
-    }
+    },
   },
   watch: {
-    "$store.state.collapse.activeList"() {
-        this.flod(this.name, this.$store.state.collapse.activeList);
+    "collapse.activeList"() {
+      this.flod(this.name, this.collapse.activeList);
     },
   },
 };
