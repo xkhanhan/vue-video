@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <xk-collapse v-model="active" accordion>
+    <!-- <xk-collapse v-model="active" >
       <xk-collapse-item title="一致性 Consistency" name="1">
         <div>
           与现实生活一致：与现实生活的流程、逻辑保持一致，遵循用户习惯的语言和概念；
@@ -26,26 +26,42 @@
           帮助用户识别：界面简单直白，让用户快速识别而非回忆，减少用户记忆负担。
         </div>
       </xk-collapse-item>
-    </xk-collapse>
+    </xk-collapse> -->
 
-    
-    <!-- <xk-video  :src="'xx'">
-      <xk-progress ></xk-progress>
-      <xk-control></xk-control>
-    </xk-video> -->
+    <xk-video :srcList="srcList" @play="play" @progress='progress'>
+     
+    </xk-video>
   </div>
 </template>
 
 <script>
+
 export default {
   name: "App",
-  components: {
-  },
   data() {
     return {
       active: ["1"],
+      active2: ["2"],
+      srcList: [
+        {
+          src: "xxxx",
+          title: "2021-04-17",
+          barrage: [{}],
+          limit : 20, // 时长限制
+          token : false,// 令牌
+        },
+      ],
     };
   },
+  methods : {
+    play(next){
+      console.log(next);
+    },
+
+    progress(next){
+      console.log(next);
+    }
+  }
 };
 </script>
 
