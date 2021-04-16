@@ -16,7 +16,7 @@
       ></video>
 
       <!-- 控件 -->
-      <xk-control class="control-content" :token="token"></xk-control>
+      <xk-control class="control-content"></xk-control>
     </div>
   </div>
 </template>
@@ -61,6 +61,7 @@ export default {
       isScreen: false, // 是否全屏
 
       contentDom: null, // 容器
+      limit: 0,
     };
   },
   created() {
@@ -93,17 +94,19 @@ export default {
        */
       videoDom.addEventListener("timeupdate", () => {
         this.nowTime = videoDom.currentTime;
+        if (isVisti(this.nowTime)) {
+          this.handlePause();
+        }
       });
-
-      // video_dom.addEventListener("emptied", () => {
-      //   console.log("emptied");
-      // });
 
       /**
        * 当视频结束播放对播放按钮进行改变
        */
       videoDom.addEventListener("ended", () => {
         this.isPlay = false;
+        setTimeout(() => {
+          this.handleNext();
+        }, 5000);
       });
     });
   },
@@ -118,32 +121,40 @@ export default {
       return this.srcList.length > 1;
     },
     token() {
-      return this.srcList[this.index].token
-    }
+      return this.srcList[this.index].token;
+    },
   },
   methods: {
-    validation(name, callckName, e){
-        this.$emit(name, () => {
-          this[callckName](e);
+    /**
+     * 中间验证器
+     * 用于用户对控件的功能做出限制处理
+     * @param { String } name 父级事件名
+     * @param { String } callckName 子项触发的事件名
+     * @param { * } e 参数
+     */
+    validation(callckName, name, ...e) {
+      if (this.token && name && isVisti(e)) {
+        this.$emit(name, (boolean) => {
+          if (boolean) {
+            this[callckName](...e);
+          }
         });
+      } else {
+        this[callckName](...e);
+      }
+    },
+    isVisti(e) {
+      if (!e) return false;
+      return Math.floor(e) >= this.nowTime;
     },
     handlePlay() {
       if (this.allTime == 0) return;
-
-      let isPlay = !this.isPlay;
-
-      if (isPlay) this.videoDom.play();
-      else this.videoDom.pause();
-
-      this.isPlay = isPlay;
+      this.videoDom.play();
+      this.isPlay = true;
     },
-    handleScreen() {
-      let isScreen = !this.isScreen;
-
-      if (isScreen) this.contentDom.requestFullscreen();
-      else document.exitFullscreen();
-
-      this.isScreen = isScreen;
+    handlePause() {
+      this.videoDom.pause();
+      this.isPlay = false;
     },
     handleVoice() {
       let isMute = !this.isMute;
@@ -155,9 +166,17 @@ export default {
         this.videoDom.volume = this.oldVoice;
       }
     },
+    handleScreen() {
+      let isScreen = !this.isScreen;
+
+      if (isScreen) this.contentDom.requestFullscreen();
+      else document.exitFullscreen();
+
+      this.isScreen = isScreen;
+    },
     handleNext() {
       let { index, srcList } = this;
-      if (index == srcList.length) return;
+      if (index == srcList.length - 1) return;
 
       this.index++;
     },

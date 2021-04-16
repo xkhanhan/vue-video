@@ -1,5 +1,5 @@
 <template>
-  <div >
+  <div>
     <!-- 进度条 -->
     <div class="video-progress">
       <xk-progress
@@ -87,10 +87,10 @@ export default {
      * 播放按钮
      */
     handlePlay() {
-      if (this.token) {
-        this.video.validation("play", "handlePlay");
+      if(this.video.isPlay){
+        this.video.validation("handlePause", "pause");
       } else {
-        this.video.handlePlay();
+        this.video.validation("handlePlay", "play", this.video.nowTime);
       }
     },
 
@@ -98,30 +98,26 @@ export default {
      * 点击音量图标时
      */
     handleVoice() {
-      this.video.handleVoice();
+      this.video.validation("handleVoice");
     },
 
     /**
      * 全屏按钮
      */
     handleScreen() {
-      this.video.handleScreen();
+      this.video.validation("handleVoice");
     },
 
     handleNext() {
-      this.video.handleNext();
+      this.video.validation("handleNext");
     },
 
     changeVoice(e) {
-      this.video.changeVoice(e);
+      this.video.validation("changeVoice", "", e);
     },
 
     changeProgress(e) {
-      if (this.token) {
-        this.video.validation("progress", "changeProgress", e);
-      } else {
-        this.video.changeProgress(e);
-      }
+      this.video.validation("progress", "changeProgress", e);
     },
 
     /**
@@ -146,7 +142,6 @@ export default {
 </script>
 
 <style scoped>
-
 /**
     进度条
 */
@@ -161,7 +156,6 @@ export default {
   display: flex;
   align-items: center;
 }
-
 
 /**
     控件的样式
