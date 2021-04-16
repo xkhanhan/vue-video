@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <!-- <xk-collapse v-model="active" >
+    <xk-collapse v-model="active" >
       <xk-collapse-item title="一致性 Consistency" name="1">
         <div>
           与现实生活一致：与现实生活的流程、逻辑保持一致，遵循用户习惯的语言和概念；
@@ -26,9 +26,8 @@
           帮助用户识别：界面简单直白，让用户快速识别而非回忆，减少用户记忆负担。
         </div>
       </xk-collapse-item>
-    </xk-collapse> -->
-
-    <xk-video :srcList="srcList" @play="play" @progress='progress'/>
+    </xk-collapse>
+    <!-- <xk-video :srcList="srcList" @play="play" @progress='progress'/> -->
   </div>
 </template>
 
