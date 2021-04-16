@@ -83,17 +83,21 @@ export default {
 
     this.drag(this.chartProgress_dom); // 拖拽事件
   },
-
+  watch : {
+    'this.bgProgress_dom.offsetWidth' () {
+      this.bgProgress_width = this.bgProgress_dom.offsetWidth
+    }
+  },
   computed: {
     /**
      * 按钮左边距
      * @return 当前进度 / 总进度 - 按钮宽度 / 2
      */
     chart_left() {
-      const { now, all, bgProgress_width } = this;
+      const { now, all} = this;
 
       // 计算出按钮按钮距离父级右边的位置，并减去比般的宽度
-      return this.calculate(now, all) * bgProgress_width - this.chart_width / 2;
+      return this.calculate(now, all) * this.bgProgress_width - this.chart_width / 2;
     },
 
     /**
