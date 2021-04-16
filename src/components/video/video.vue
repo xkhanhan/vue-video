@@ -1,10 +1,17 @@
 <template>
   <div>
     <div class="video-content" ref="content">
-      <!-- 头部视频信息 -->
-      <div class="video-header">
-        <div class="title">{{ title }}</div>
-      </div>
+      <transition
+        @before-enter="opacityBEAL"
+        @after-enter="opacityAEBL"
+        @before-leave="opacityAEBL"
+        @after-leave="opacityBEAL"
+      >
+        <!-- 头部视频信息 -->
+        <div class="video-header" v-show="show">
+          <div class="title">{{ title }}</div>
+        </div>
+      </transition>
 
       <!-- 视频 -->
       <video
@@ -13,10 +20,18 @@
         ref="video"
         autobuffer
         :src="videoSrc"
+        @mousemove="handleMove()"
       ></video>
 
-      <!-- 控件 -->
-      <xk-control class="control-content"></xk-control>
+      <transition
+        @before-enter="opacityBEAL"
+        @after-enter="opacityAEBL"
+        @before-leave="opacityAEBL"
+        @after-leave="opacityBEAL"
+      >
+        <!-- 控件 -->
+        <xk-control v-show="show" class="control-content"></xk-control>
+      </transition>
     </div>
   </div>
 </template>
@@ -61,7 +76,11 @@ export default {
       isScreen: false, // 是否全屏
 
       contentDom: null, // 容器
-      limit: 0,
+
+      show: false,
+
+      endedTimeout: null,
+      moveTimeout : null
     };
   },
   created() {
@@ -94,7 +113,7 @@ export default {
        */
       videoDom.addEventListener("timeupdate", () => {
         this.nowTime = videoDom.currentTime;
-        if (isVisti(this.nowTime)) {
+        if (this.isVisti(this.nowTime)) {
           this.handlePause();
         }
       });
@@ -104,9 +123,11 @@ export default {
        */
       videoDom.addEventListener("ended", () => {
         this.isPlay = false;
-        setTimeout(() => {
+        if(this.endedTimeout) clearTimeout(this.endedTimeout);
+        this.endedTimeout = setTimeout(() => {
           this.handleNext();
         }, 5000);
+
       });
     });
   },
@@ -133,7 +154,7 @@ export default {
      * @param { * } e 参数
      */
     validation(callckName, name, ...e) {
-      if (this.token && name && isVisti(e)) {
+      if (this.token && name && this.isVisti(e)) {
         this.$emit(name, (boolean) => {
           if (boolean) {
             this[callckName](...e);
@@ -189,6 +210,28 @@ export default {
       this.nowTime = e;
       this.videoDom.currentTime = e;
     },
+    handleMove() {
+      if(this.moveTimeout) clearTimeout(this.moveTimeout);
+
+      this.moveTimeout = setTimeout(() => {
+        console.log('x');
+        this.show = true;
+      },5000)
+    },
+
+    opacityBEAL(el) {
+      el.style.opacity = 0;
+    },
+    opacityAEBL(el) {
+      el.style.opacity = 1;
+    },
+  },
+  destroyed() {
+    clearInterval(this.moveTimeout);
+    clearInterval(this.endedTimeout);
+
+    this.setTimeout = null;
+    this.endedTimeout = null;
   },
 };
 </script>
@@ -229,13 +272,7 @@ export default {
 
 .video-header,
 .control-content {
-  opacity: 0;
   transition: 0.3s;
-}
-
-.video-content:hover .video-header,
-.video-content:hover .control-content {
-  opacity: 1;
 }
 
 .video-progress:hover .progress-bg {
