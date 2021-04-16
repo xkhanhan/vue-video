@@ -6,13 +6,15 @@ import xkCollapseItem from './collapseItem/index';
 import xkProgress from './progress/index';
 import xkVideo from './video/index';
 import xkControl from './control/index';
+import xkLoading from './loading/index';
 
 const components = [
     xkCollapse,
     xkCollapseItem,
     xkProgress,
     xkVideo,
-    xkControl
+    xkControl,
+    xkLoading
 ]
 
 /**
