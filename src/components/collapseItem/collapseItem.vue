@@ -59,7 +59,6 @@ export default {
      * @param { Array } list 存放选中的面板数组，改值在父级
      */
     flod(name, list) {
-      console.log(name, list);
       const is = this.isIn(name, list);
       if (is) {
         this.show();
