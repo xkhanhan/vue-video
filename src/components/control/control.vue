@@ -79,7 +79,46 @@ export default {
       default: false,
     },
   },
+  mounted() {
+    window.onkeydown = (e) => {
+      console.log(e);
+      switch (e.keyCode) {
+        case 27: //esc
+          this.video.isScreen = false
+          break;
+        case 32: // space
+          this.handlePlay();
+          break;
+        case 37: // ←
+          this.changeProgress(
+            this.addAndDele(this.video.nowTime, this.video.allTime, -10)
+          );
+          break;
+        case 38: // ↑
+          this.changeVoice(
+            this.addAndDele(this.video.nowVoice, this.video.allVoice, 0.05)
+          );
+          break;
+        case 39: // →
+          this.changeProgress(
+            this.addAndDele(this.video.nowTime, this.video.allTime, 10)
+          );
+          break;
+        case 40: // ↓
+          this.changeVoice(
+            this.addAndDele(this.video.nowVoice, this.video.allVoice, -0.05)
+          );
+          break;
+      }
+    };
+  },
   methods: {
+    addAndDele(now, all, value) {
+      let nowTime = now + value;
+      nowTime = nowTime < 0 ? 0 : nowTime > all ? all : nowTime;
+      return nowTime;
+    },
+
     /**
      * 播放按钮
      */
