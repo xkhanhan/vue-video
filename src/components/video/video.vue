@@ -6,14 +6,10 @@
       @mousemove="handleMove"
       @mouseleave="handleLeave"
     >
-      <transition
-        name="opacity"
-      >
-        <!-- 头部视频信息 -->
-        <div class="video-header" v-show="show">
-          <div class="title">{{ title }}</div>
-        </div>
-      </transition>
+      <!-- 头部视频信息 -->
+      <div class="video-header" :class="{ move: show }">
+        <div class="title">{{ title }}</div>
+      </div>
 
       <!-- 视频 -->
       <video
@@ -24,12 +20,9 @@
         :src="videoSrc"
       ></video>
       <xk-loading v-show="loading"></xk-loading>
-      <transition
-        name="opacity"
-      >
-        <!-- 控件 -->
-        <xk-control v-show="show" class="control-content"></xk-control>
-      </transition>
+
+      <!-- 控件 -->
+      <xk-control class="control-content" :class="{ move: show }"></xk-control>
     </div>
   </div>
 </template>
@@ -77,14 +70,12 @@ export default {
 
       contentDom: null, // 容器
 
-      show: true,
+      show: false,
 
       endedTimeout: null,
       moveTimeout: null,
 
       loading: false,
-
-      parentWidth : 0,
     };
   },
   created() {
@@ -205,7 +196,6 @@ export default {
       let isScreen = !this.isScreen;
       if (isScreen) this.contentDom.requestFullscreen();
       else document.exitFullscreen();
-
       this.isScreen = isScreen;
     },
     handleNext() {
@@ -258,6 +248,7 @@ export default {
   width: 100%;
   height: 100%;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   background-color: #000;
@@ -274,9 +265,9 @@ export default {
   height: 42px;
   position: absolute;
   left: 10px;
-  top: 0;
   display: flex;
   align-items: center;
+  top: -42px;
 }
 .video-header .title {
   width: 40%;
@@ -285,22 +276,28 @@ export default {
   white-space: nowrap;
 }
 
+.control-content{
+  padding: 0 0 10px 0;
+  position: absolute;
+  bottom: -55px;
+}
+
 .video-header,
 .control-content {
-  transition: all 0.3s;
+  transition: all 0.5s;
   z-index: 99;
-}
-
-.video-progress:hover .progress-bg {
-  height: 7px;
-}
-
-.opacity-enter,
-.opacity-leave-to{
+  left: 0px;
   opacity: 0;
 }
-.opacity-leave,
-.opacity-enter-to{
+
+.video-header.move{
+  top: 0px;
   opacity: 1;
 }
+.control-content.move{
+  bottom: 0px;
+  opacity: 1;
+}
+
+
 </style>

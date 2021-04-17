@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- 进度条 -->
-    <div class="video-progress">
+    <div class="video-progress" ref="progress">
       <xk-progress
         :now="video.nowTime"
         :all="video.allTime"
@@ -48,14 +48,11 @@
 </template>
 
 <script>
-import xkProgress from "../progress/index";
+import xkProgress from "./progress";
 
 export default {
   name: "xkControl",
   components: { xkProgress },
-  data() {
-    return {};
-  },
   inject: ["video"],
   computed: {
     /**
@@ -87,7 +84,7 @@ export default {
      * 播放按钮
      */
     handlePlay() {
-      if(this.video.isPlay){
+      if (this.video.isPlay) {
         this.video.validation("handlePause", "pause");
       } else {
         this.video.validation("handlePlay", "play", this.video.nowTime);
@@ -105,7 +102,7 @@ export default {
      * 全屏按钮
      */
     handleScreen() {
-      this.video.validation("handleVoice");
+      this.video.validation("handleScreen");
     },
 
     handleNext() {
@@ -117,7 +114,7 @@ export default {
     },
 
     changeProgress(e) {
-      this.video.validation("progress", "changeProgress", e);
+      this.video.validation("changeProgress", "progress", e);
     },
 
     /**
@@ -142,11 +139,14 @@ export default {
 </script>
 
 <style scoped>
+.control-content{
+  width: 100%;
+  height: auto;
+}
 /**
     进度条
 */
 .video-progress {
-  position: absolute;
   left: 0;
   bottom: 42px;
   width: 100%;
@@ -161,7 +161,6 @@ export default {
     控件的样式
 */
 .video-control {
-  position: absolute;
   bottom: 10px;
   left: 0;
   z-index: 999;
@@ -204,5 +203,9 @@ export default {
 
 .video-sitting:hover {
   transform: rotateZ(180deg);
+}
+
+.video-progress:hover .progress-bg {
+  height: 7px;
 }
 </style>
