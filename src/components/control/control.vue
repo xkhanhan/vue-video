@@ -139,7 +139,7 @@ export default {
 </script>
 
 <style scoped>
-.control-content{
+.control-content {
   width: 100%;
   height: auto;
 }

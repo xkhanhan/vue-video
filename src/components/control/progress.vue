@@ -59,12 +59,14 @@ export default {
   created() {
     if (this.now > this.all) throw new Error("当前值不允许大于总值");
   },
+  inject: ["video"],
   data() {
     return {
       nowProgress_dom: null, // 进度条元素
       bufferProgress_dom: null, // 缓存条元素
       bgProgress_dom: null, // 背景进度
 
+      progress_width: 0,
       bgProgress_width: 0,
       chart_width: 0, // 按钮的宽度
 
@@ -78,15 +80,23 @@ export default {
     this.bgProgress_dom = this.$refs.bgProgress; // 进度条父级
 
     this.bgProgress_width = this.bgProgress_dom.offsetWidth; // 父级宽度
+    this.progress_width = this.bgProgress_width;
     this.chart_width = this.chartProgress_dom.offsetWidth; // 按钮宽度
-
     this.drag(this.chartProgress_dom); // 拖拽事件
   },
- 
+
+  watch: {
+    "video.isScreen"() {
+      if (this.video.isScreen) {
+        setTimeout(() => {
+          this.progress_width = this.bgProgress_dom.offsetWidth;
+        }, 500);
+      } else {
+        this.progress_width = this.bgProgress_width;
+      }
+    },
+  },
   computed: {
-    // bgProgress_width(){
-    //   return this.bgProgress_dom.offsetWidth;
-    // },
     /**
      * 按钮左边距
      * @return 当前进度 / 总进度 - 按钮宽度 / 2
@@ -96,7 +106,7 @@ export default {
 
       // 计算出按钮按钮距离父级右边的位置，并减去比般的宽度
       return (
-        this.calculate(now, all) * this.bgProgress_width - this.chart_width / 2
+        this.calculate(now, all) * this.progress_width - this.chart_width / 2
       );
     },
 
@@ -170,7 +180,6 @@ export default {
      */
     changChartLeft(number) {
       const { all } = this;
-      this.bgProgress_width = this.bgProgress_dom.offsetWidth;
 
       number = number / this.bgProgress_width;
       if (number < 0) {
