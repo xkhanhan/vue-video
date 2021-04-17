@@ -22,7 +22,7 @@
         :src="videoSrc"
         @mousemove="handleMove()"
       ></video>
-
+      <xk-loading></xk-loading>
       <transition
         @before-enter="opacityBEAL"
         @after-enter="opacityAEBL"
@@ -38,11 +38,13 @@
 
 <script>
 import xkControl from "../control/index";
+import xkLoading from "../loading/index";
 
 export default {
   name: "xkVideo",
   components: {
     xkControl,
+    xkLoading
   },
   props: {
     /**
@@ -218,7 +220,6 @@ export default {
         this.show = true;
       },5000)
     },
-
     opacityBEAL(el) {
       el.style.opacity = 0;
     },
@@ -273,6 +274,7 @@ export default {
 .video-header,
 .control-content {
   transition: 0.3s;
+  z-index: 99;
 }
 
 .video-progress:hover .progress-bg {
