@@ -1,5 +1,5 @@
 module.exports = {
-    devServer: {
+    devServer: { // 内网穿透
         disableHostCheck: true
     }
 }
