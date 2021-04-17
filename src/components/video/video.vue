@@ -1,11 +1,13 @@
 <template>
   <div>
-    <div class="video-content" ref="content">
+    <div
+      class="video-content"
+      ref="content"
+      @mousemove="handleMove"
+      @mouseleave="handleLeave"
+    >
       <transition
-        @before-enter="opacityBEAL"
-        @after-enter="opacityAEBL"
-        @before-leave="opacityAEBL"
-        @after-leave="opacityBEAL"
+        name="opacity"
       >
         <!-- 头部视频信息 -->
         <div class="video-header" v-show="show">
@@ -20,14 +22,10 @@
         ref="video"
         autobuffer
         :src="videoSrc"
-        @mousemove="handleMove()"
       ></video>
-      <xk-loading></xk-loading>
+      <xk-loading v-show="loading"></xk-loading>
       <transition
-        @before-enter="opacityBEAL"
-        @after-enter="opacityAEBL"
-        @before-leave="opacityAEBL"
-        @after-leave="opacityBEAL"
+        name="opacity"
       >
         <!-- 控件 -->
         <xk-control v-show="show" class="control-content"></xk-control>
@@ -44,7 +42,7 @@ export default {
   name: "xkVideo",
   components: {
     xkControl,
-    xkLoading
+    xkLoading,
   },
   props: {
     /**
@@ -67,7 +65,7 @@ export default {
       videoDom: null, // video 标签
 
       nowTime: 0, // 视频当前时间
-      allTime: 10, // 视频总时间
+      allTime: 1000, // 视频总时间
       buffer: 0, // 缓存
 
       nowVoice: 1, // 当前音量
@@ -79,10 +77,14 @@ export default {
 
       contentDom: null, // 容器
 
-      show: false,
+      show: true,
 
       endedTimeout: null,
-      moveTimeout : null
+      moveTimeout: null,
+
+      loading: false,
+
+      parentWidth : 0,
     };
   },
   created() {
@@ -121,15 +123,25 @@ export default {
       });
 
       /**
+       * 加载时
+       */
+      videoDom.addEventListener("waiting", () => {
+        this.loading = true;
+      });
+
+      videoDom.addEventListener("playing", () => {
+        this.loading = false;
+      });
+
+      /**
        * 当视频结束播放对播放按钮进行改变
        */
       videoDom.addEventListener("ended", () => {
         this.isPlay = false;
-        if(this.endedTimeout) clearTimeout(this.endedTimeout);
+        if (this.endedTimeout) clearTimeout(this.endedTimeout);
         this.endedTimeout = setTimeout(() => {
           this.handleNext();
         }, 5000);
-
       });
     });
   },
@@ -191,7 +203,6 @@ export default {
     },
     handleScreen() {
       let isScreen = !this.isScreen;
-
       if (isScreen) this.contentDom.requestFullscreen();
       else document.exitFullscreen();
 
@@ -213,18 +224,21 @@ export default {
       this.videoDom.currentTime = e;
     },
     handleMove() {
-      if(this.moveTimeout) clearTimeout(this.moveTimeout);
-
-      this.moveTimeout = setTimeout(() => {
-        console.log('x');
+      if (!this.show) {
         this.show = true;
-      },5000)
+        if (this.moveTimeout) clearInterval(this.moveTimeout);
+        this.moveTimeout = setTimeout(() => {
+          this.show = false;
+        }, 3000);
+      } else {
+        if (this.moveTimeout) clearInterval(this.moveTimeout);
+        this.moveTimeout = setTimeout(() => {
+          this.show = false;
+        }, 3000);
+      }
     },
-    opacityBEAL(el) {
-      el.style.opacity = 0;
-    },
-    opacityAEBL(el) {
-      el.style.opacity = 1;
+    handleLeave() {
+      this.show = false;
     },
   },
   destroyed() {
@@ -273,11 +287,20 @@ export default {
 
 .video-header,
 .control-content {
-  transition: 0.3s;
+  transition: all 0.3s;
   z-index: 99;
 }
 
 .video-progress:hover .progress-bg {
   height: 7px;
+}
+
+.opacity-enter,
+.opacity-leave-to{
+  opacity: 0;
+}
+.opacity-leave,
+.opacity-enter-to{
+  opacity: 1;
 }
 </style>
