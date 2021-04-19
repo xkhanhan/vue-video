@@ -113,6 +113,9 @@ export default {
     };
   },
   methods: {
+    /**
+     * 键盘事件处理函数
+     */
     addAndDele(now, all, value) {
       let nowTime = now + value;
       nowTime = nowTime < 0 ? 0 : nowTime > all ? all : nowTime;
