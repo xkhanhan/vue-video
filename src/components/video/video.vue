@@ -225,11 +225,11 @@ export default {
       else document.exitFullscreen();
       this.isScreen = isScreen;
     },
-    handleNext() {
+    handleNext(value=1) {
       let { index, srcList } = this;
-      if (index == srcList.length - 1) return;
+      const now = (srcList.length + (index + value)) % srcList.length;
 
-      this.index++;
+      this.index = now;
     },
     changeVoice(e) {
       this.nowVoice = e;
