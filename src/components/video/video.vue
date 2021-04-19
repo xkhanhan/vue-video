@@ -240,6 +240,10 @@ export default {
       this.nowTime = e;
       this.videoDom.currentTime = e;
     },
+
+    /**
+     * 以下为鼠标移出，移入视频时，控件的显示方法
+     */
     handleMove() {
       if (!this.show) {
         this.show = true;
