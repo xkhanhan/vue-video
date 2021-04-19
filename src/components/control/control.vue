@@ -122,9 +122,6 @@ export default {
       return nowTime;
     },
 
-    /**
-     * 播放按钮
-     */
     handlePlay() {
       if (this.video.isPlay) {
         this.video.validation("handlePause", "pause");
@@ -132,29 +129,18 @@ export default {
         this.video.validation("handlePlay", "play", this.video.nowTime);
       }
     },
-
-    /**
-     * 点击音量图标时
-     */
     handleVoice() {
       this.video.validation("handleVoice");
     },
-
-    /**
-     * 全屏按钮
-     */
     handleScreen() {
       this.video.validation("handleScreen");
     },
-
     handleNext() {
       this.video.validation("handleNext");
     },
-
     changeVoice(e) {
       this.video.validation("changeVoice", "", e);
     },
-
     changeProgress(e) {
       this.video.validation("changeProgress", "progress", e);
     },
@@ -177,6 +163,9 @@ export default {
       return minutes + ":" + seconds; // xx：xx
     },
   },
+  beforeDestroy(){
+     window.onkeydown = null;
+  }
 };
 </script>
 
