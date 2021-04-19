@@ -1,6 +1,6 @@
 <template>
   <div class="loading-content">
-    <div class="loading">
+    <div class="loading" :class="{'center' : type == 'center', 'end' : type == 'end'}">
       <div
         v-for="item in 4"
         :key="item"
@@ -15,6 +15,12 @@
 <script>
 export default {
   name: "xkLoading",
+  props: {
+    type : {
+      type : String,
+      default : "center"
+    }
+  },
   data() {
     return {
       name: ["item"],
@@ -35,21 +41,27 @@ export default {
   background: rgba(0,0,0,.5);
 }
 .loading {
-  width: 60px;
+  width: 40px;
   height: 40px;
   display: flex;
   justify-content: space-between;
+}
+
+.loading.center{
+  align-items: center;
+}
+.loading.end{
   align-items: flex-end;
 }
 
 .loading .loading-item {
   height: 100%;
-  width: calc(100% / 7);
+  width: calc(100% / 10);
   border-radius: 5px;
   background-color: #00a1d6;
 
   animation-name: loading;
-  animation-duration: 1s;
+  animation-duration: 2s;
   animation-direction: alternate;
   animation-iteration-count: infinite;
 }
@@ -67,9 +79,11 @@ export default {
 }
 @keyframes loading {
   0% {
+    height: 100%;
+  }
+  50% {
     height: 10%;
   }
-
   100% {
     height: 100%;
   }
