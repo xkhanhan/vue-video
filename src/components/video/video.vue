@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="video">
     <div
       class="video-content"
       ref="content"
@@ -24,18 +24,23 @@
       <!-- 控件 -->
       <xk-control class="control-content" :class="{ move: show }"></xk-control>
     </div>
+    <div class="video-list">
+      <xk-list :data="srcList"></xk-list>
+    </div>
   </div>
 </template>
 
 <script>
 import xkControl from "../control/index";
 import xkLoading from "../loading/index";
+import xkList from '../list/index';
 
 export default {
   name: "xkVideo",
   components: {
     xkControl,
     xkLoading,
+    xkList
   },
   props: {
     /**
@@ -54,11 +59,11 @@ export default {
   data() {
     return {
       isPlay: false,
-      index: 0, //存在视频列表时，当前视频路径下标
+      index: 0, //当前视频路径下标
       videoDom: null, // video 标签
 
       nowTime: 0, // 视频当前时间
-      allTime: 1000, // 视频总时间
+      allTime: 0, // 视频总时间
       buffer: 0, // 缓存
 
       nowVoice: 1, // 当前音量
@@ -147,8 +152,11 @@ export default {
       return this.srcList.length > 1;
     },
     token() {
-      return this.srcList[this.index].token;
+      return this.srcList[this.index].token || false;
     },
+    limit() {
+      return this.srcList[this.index].limit || 0;
+    }
   },
   methods: {
     /**
@@ -158,21 +166,40 @@ export default {
      * @param { String } callckName 子项触发的事件名
      * @param { * } e 参数
      */
-    validation(callckName, name, ...e) {
+    validation(callckName, name, e) {
+      /**
+       * 当该视频需要验证，
+       * 且控件是点击进度条、播放暂停按钮，
+       * 且跳转的进度大于设置的进度
+       * 进行触发钩子函数
+       * 使用者可在 deal 钩子中调用传入的函数，并对该函数传入一个 boolean 值，来决定是否进行下一步操作
+       */
       if (this.token && name && this.isVisti(e)) {
-        this.$emit(name, (boolean) => {
+        this.$emit('deal', (boolean) => {
           if (boolean) {
-            this[callckName](...e);
+            return;
+          } else {
+            this[callckName](e);
           }
         });
       } else {
-        this[callckName](...e);
+        this[callckName](e);
       }
     },
+    /**
+     * 传入的时间是否大于等于规定的时间
+     * @param {Number} e 传入的时间
+     * @return {Boolean} 返回布尔类型
+     */
     isVisti(e) {
       if (!e) return false;
-      return Math.floor(e) >= this.nowTime;
+      return Math.floor(e) >= this.limit;
     },
+
+
+    /**
+     * 以下均为控件事件
+     */
     handlePlay() {
       if (this.allTime == 0) return;
       this.videoDom.play();
@@ -243,6 +270,11 @@ export default {
 
 <style scoped>
 @import url("../../css/iconfont.css");
+/* .video{
+  display: flex;
+
+} */
+
 
 .video-content {
   width: 100%;
