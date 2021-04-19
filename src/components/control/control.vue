@@ -115,6 +115,11 @@ export default {
   methods: {
     /**
      * 键盘事件处理函数
+     * 内部已做边界处理
+     * @param { Number } now 当前量
+     * @param { Number } all 总量
+     * @param { Number } value 增量（传入负数就是减量）
+     * @return { Number } 修改的值
      */
     addAndDele(now, all, value) {
       let nowTime = now + value;
