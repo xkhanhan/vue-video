@@ -25,7 +25,7 @@
       <xk-control class="control-content" :class="{ move: show }"></xk-control>
     </div>
     <div class="video-list">
-      <xk-list :data="srcList"></xk-list>
+      <!-- <xk-list :data="srcList"></xk-list> -->
     </div>
   </div>
 </template>
@@ -33,14 +33,14 @@
 <script>
 import xkControl from "../control/index";
 import xkLoading from "../loading/index";
-import xkList from '../list/index';
+// import xkList from "../list/index";
 
 export default {
   name: "xkVideo",
   components: {
     xkControl,
     xkLoading,
-    xkList
+    // xkList,
   },
   props: {
     /**
@@ -148,20 +148,20 @@ export default {
     title() {
       return this.srcList[this.index].title;
     },
-    isNext() {
-      return this.srcList.length > 1;
-    },
     token() {
       return this.srcList[this.index].token || false;
     },
     limit() {
       return this.srcList[this.index].limit || 0;
-    }
+    },
+    isNext() {
+      return this.srcList.length > 1;
+    },
   },
   methods: {
     /**
      * 中间验证器
-     * 用于用户对控件的功能做出限制处理
+     * 用于使用者对控件的功能做出限制处理
      * @param { String } name 父级事件名
      * @param { String } callckName 子项触发的事件名
      * @param { * } e 参数
@@ -170,22 +170,37 @@ export default {
       /**
        * 当该视频需要验证，
        * 且控件是点击进度条、播放暂停按钮，
-       * 且跳转的进度大于设置的进度
+       * 且跳转的进度大于设置的限制进度
        * 进行触发钩子函数
        * 使用者可在 deal 钩子中调用传入的函数，并对该函数传入一个 boolean 值，来决定是否进行下一步操作
        */
       if (this.token && name && this.isVisti(e)) {
-        this.$emit('deal', (boolean) => {
-          if (boolean) {
+        let index = this.index; // 暂存当前视频下标
+
+        /**
+         * 传入一个空的视频地址，防止控制台命令播放视频
+         */
+        this.srcList.push({
+          src: "",
+          title: "",
+        });
+        
+        this.index = this.srcList.length - 1;// 使用空视频地址
+
+        this.$emit("deal", (boolean) => {
+          if (!boolean) {
             return;
           } else {
-            this[callckName](e);
+            this.srcList.pop(); // 删除空地址
+            this.index = index; // 使用被限制的视频地址
+            this[callckName](e); // 进行下一步控件
           }
         });
       } else {
         this[callckName](e);
       }
     },
+
     /**
      * 传入的时间是否大于等于规定的时间
      * @param {Number} e 传入的时间
@@ -195,7 +210,6 @@ export default {
       if (!e) return false;
       return Math.floor(e) >= this.limit;
     },
-
 
     /**
      * 以下均为控件事件
@@ -225,9 +239,9 @@ export default {
       else document.exitFullscreen();
       this.isScreen = isScreen;
     },
-    handleNext(value=1) {
+    handleNext(value = 1) {
       let { index, srcList } = this;
-      const now = (srcList.length + (index + value)) % srcList.length;
+      let now = (srcList.length + (index + value)) % srcList.length;
 
       this.index = now;
     },
@@ -247,6 +261,7 @@ export default {
     handleMove() {
       if (!this.show) {
         this.show = true;
+
         if (this.moveTimeout) clearInterval(this.moveTimeout);
         this.moveTimeout = setTimeout(() => {
           this.show = false;
@@ -278,7 +293,6 @@ export default {
   display: flex;
 
 } */
-
 
 .video-content {
   width: 100%;
@@ -312,7 +326,7 @@ export default {
   white-space: nowrap;
 }
 
-.control-content{
+.control-content {
   padding: 0 0 10px 0;
   position: absolute;
   bottom: -55px;
@@ -326,14 +340,12 @@ export default {
   opacity: 0;
 }
 
-.video-header.move{
+.video-header.move {
   top: 0px;
   opacity: 1;
 }
-.control-content.move{
+.control-content.move {
   bottom: 0px;
   opacity: 1;
 }
-
-
 </style>
