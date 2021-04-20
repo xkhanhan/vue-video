@@ -119,7 +119,7 @@ export default {
      * @param { Number } now 当前量
      * @param { Number } all 总量
      * @param { Number } value 增量（传入负数就是减量）
-     * @return { Number } 修改的值
+     * @return { Number } 修改后的值
      */
     addAndDele(now, all, value) {
       let nowTime = now + value;
