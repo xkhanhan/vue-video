@@ -115,6 +115,7 @@ export default {
         this.nowTime = videoDom.currentTime;
         if (this.isVisti(this.nowTime)) {
           this.handlePause();
+          this.validation("handlePlay", "play");
         }
       });
 
@@ -134,10 +135,14 @@ export default {
        */
       videoDom.addEventListener("ended", () => {
         this.isPlay = false;
-        if (this.endedTimeout) clearTimeout(this.endedTimeout);
-        this.endedTimeout = setTimeout(() => {
-          this.handleNext();
-        }, 5000);
+
+        this.$emit("ended", (boolean = true) => {
+          if (!boolean) {
+            return;
+          } else {
+            this.handleNext();
+          }
+        });
       });
     });
   },
@@ -184,8 +189,8 @@ export default {
           src: "",
           title: "",
         });
-        
-        this.index = this.srcList.length - 1;// 使用空视频地址
+
+        this.index = this.srcList.length - 1; // 使用空视频地址
 
         this.$emit("deal", (boolean) => {
           if (!boolean) {
