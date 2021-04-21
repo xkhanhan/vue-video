@@ -27,8 +27,8 @@
         </div>
       </xk-collapse-item>
     </xk-collapse> -->
-    <xk-video class="video"  :srcList="srcList" @play="play" @progress='progress'/>
-  
+    <xk-video class="video"  :srcList="srcList" @deal="deal" />
+    <!-- <xk-button size="medium" >默认按钮</xk-button> -->
   </div>
 </template>
 
@@ -39,24 +39,235 @@ export default {
   name: "App",
   data() {
     return {
-      active: ["1"],
-      active2: ["2"],
       srcList: [
         {
           src: "xxxx",
           title: "2021-04-17",
-          barrage: [{}],
-          
+          barrage: [{
+            user : {
+              
+            },
+            time : '2021-04-01',
+            body : 'xxxxxxxxxxx',
+            position : 'top||bottom||static',
+            style : {
+              color : 'red',
+              fontSize : '18px',
+            }
+          }],
+        },
+         {
+          src: "xxxx",
+          title: "2021-04-17",
+          barrage: [{
+            user : {
+              
+            },
+            time : '2021-04-01',
+            body : 'xxxxxxxxxxx',
+            position : 'top||bottom||static',
+            style : {
+              color : 'red',
+              fontSize : '18px',
+            }
+          }],
+        },
+         {
+          src: "xxxx",
+          title: "2021-04-17",
+          barrage: [{
+            user : {
+              
+            },
+            time : '2021-04-01',
+            body : 'xxxxxxxxxxx',
+            position : 'top||bottom||static',
+            style : {
+              color : 'red',
+              fontSize : '18px',
+            }
+          }],
+        },
+         {
+          src: "xxxx",
+          title: "2021-04-17",
+          barrage: [{
+            user : {
+              
+            },
+            time : '2021-04-01',
+            body : 'xxxxxxxxxxx',
+            position : 'top||bottom||static',
+            style : {
+              color : 'red',
+              fontSize : '18px',
+            }
+          }],
+        },
+         {
+          src: "xxxx",
+          title: "2021-04-17",
+          barrage: [{
+            user : {
+              
+            },
+            time : '2021-04-01',
+            body : 'xxxxxxxxxxx',
+            position : 'top||bottom||static',
+            style : {
+              color : 'red',
+              fontSize : '18px',
+            }
+          }],
+        },
+         {
+          src: "xxxx",
+          title: "2021-04-17",
+          barrage: [{
+            user : {
+              
+            },
+            time : '2021-04-01',
+            body : 'xxxxxxxxxxx',
+            position : 'top||bottom||static',
+            style : {
+              color : 'red',
+              fontSize : '18px',
+            }
+          }],
+        },
+         {
+          src: "xxxx",
+          title: "2021-04-17",
+          barrage: [{
+            user : {
+              
+            },
+            time : '2021-04-01',
+            body : 'xxxxxxxxxxx',
+            position : 'top||bottom||static',
+            style : {
+              color : 'red',
+              fontSize : '18px',
+            }
+          }],
+        },
+         {
+          src: "xxxx",
+          title: "2021-04-17",
+          barrage: [{
+            user : {
+              
+            },
+            time : '2021-04-01',
+            body : 'xxxxxxxxxxx',
+            position : 'top||bottom||static',
+            style : {
+              color : 'red',
+              fontSize : '18px',
+            }
+          }],
+        },
+         {
+          src: "xxxx",
+          title: "2021-04-17",
+          barrage: [{
+            user : {
+              
+            },
+            time : '2021-04-01',
+            body : 'xxxxxxxxxxx',
+            position : 'top||bottom||static',
+            style : {
+              color : 'red',
+              fontSize : '18px',
+            }
+          }],
+        },
+         {
+          src: "xxxx",
+          title: "2021-04-17",
+          barrage: [{
+            user : {
+              
+            },
+            time : '2021-04-01',
+            body : 'xxxxxxxxxxx',
+            position : 'top||bottom||static',
+            style : {
+              color : 'red',
+              fontSize : '18px',
+            }
+          }],
+        },
+         {
+          src: "xxxx",
+          title: "2021-04-17",
+          barrage: [{
+            user : {
+              
+            },
+            time : '2021-04-01',
+            body : 'xxxxxxxxxxx',
+            position : 'top||bottom||static',
+            style : {
+              color : 'red',
+              fontSize : '18px',
+            }
+          }],
+        },
+          {
+          src: "xxxx",
+          title: "2021-04-17",
+          barrage: [{
+            user : {
+              
+            },
+            time : '2021-04-01',
+            body : 'xxxxxxxxxxx',
+            position : 'top||bottom||static',
+            style : {
+              color : 'red',
+              fontSize : '18px',
+            }
+          }],
+        },
+          {
+          src: "xxxx",
+          title: "2021-04-17",
+          barrage: [{
+            user : {
+              
+            },
+            time : '2021-04-01',
+            body : 'xxxxxxxxxxx',
+            position : 'top||bottom||static',
+            style : {
+              color : 'red',
+              fontSize : '18px',
+            }
+          }],
+        },  {
+          src: "xxxx",
+          title: "2021-04-17",
+          barrage: [{
+            user : {
+              
+            },
+            time : '2021-04-01',
+            body : 'xxxxxxxxxxx',
+            position : 'top||bottom||static',
+            style : {
+              color : 'red',
+              fontSize : '18px',
+            }
+          }],
         },
       ],
     };
   },
   methods : {
-    play(next){
-      console.log(next);
-    },
-
-    progress(next){
+    deal(next){
       console.log(next);
     }
   }
@@ -64,141 +275,13 @@ export default {
 </script>
 
 <style>
+@import url('./css/index.css');
+
 #app, .video {
-  width: 638px;
-  height: 500px;
   margin: 0 auto;
+  min-width: 1000px;
+  max-width: 1200px;
 }
 
-/**
- 清除默认样式
- */
-/* v2.0 | 20110126
-http://meyerweb.com/eric/tools/css/reset/ 
-License: none (public domain)
-*/
-html,
-body,
-div,
-span,
-applet,
-object,
-iframe,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-p,
-blockquote,
-pre,
-a,
-abbr,
-acronym,
-address,
-big,
-cite,
-code,
-del,
-dfn,
-em,
-img,
-ins,
-kbd,
-q,
-s,
-samp,
-small,
-strike,
-strong,
-sub,
-sup,
-tt,
-var,
-b,
-u,
-i,
-center,
-dl,
-dt,
-dd,
-ol,
-ul,
-li,
-fieldset,
-form,
-label,
-legend,
-table,
-caption,
-tbody,
-tfoot,
-thead,
-tr,
-th,
-td,
-article,
-aside,
-canvas,
-details,
-embed,
-figure,
-figcaption,
-footer,
-header,
-hgroup,
-menu,
-nav,
-output,
-ruby,
-section,
-summary,
-time,
-mark,
-audio,
-video {
-  margin: 0;
-  padding: 0;
-  border: 0;
-  font-size: 100%;
-  font: inherit;
-  vertical-align: baseline;
-}
-/* HTML5 display-role reset for older browsers */
-article,
-aside,
-details,
-figcaption,
-figure,
-footer,
-header,
-hgroup,
-menu,
-nav,
-section {
-  display: block;
-}
-body {
-  line-height: 1;
-}
-ol,
-ul {
-  list-style: none;
-}
-blockquote,
-q {
-  quotes: none;
-}
-blockquote:before,
-blockquote:after,
-q:before,
-q:after {
-  content: "";
-  content: none;
-}
-table {
-  border-collapse: collapse;
-  border-spacing: 0;
-}
+
 </style>
