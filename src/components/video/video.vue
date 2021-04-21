@@ -38,7 +38,6 @@
             >
           </div>
         </xk-collapse-item>
-      </xk-collapse>
     </div>
   </div>
 </template>
@@ -48,6 +47,7 @@ import xkControl from "../control/index";
 import xkLoading from "../loading/index";
 import xkCollapse from "../collapse/index";
 import xkButton from "../button/index";
+import xkCollapse from '../collapse/index';
 
 export default {
   name: "xkVideo",
@@ -56,6 +56,7 @@ export default {
     xkLoading,
     xkCollapse,
     xkButton,
+    xkCollapse
   },
   props: {
     /**
@@ -239,7 +240,7 @@ export default {
     handlePlay() {
       if (this.allTime == 0) return;
       this.videoDom.play();
-      this.isPlay = true;
+      this.isPlay = true; 
     },
     handlePause() {
       this.videoDom.pause();
