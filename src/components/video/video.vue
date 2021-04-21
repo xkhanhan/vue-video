@@ -25,7 +25,7 @@
       <xk-control class="control-content" :class="{ move: show }"></xk-control>
     </div>
     <div class="list-barrage">
-      <xk-collapse v-model="activeList"  v-if='isNext'>
+      <xk-collapse v-model="activeList"  v-if="isNext">
         <xk-collapse-item title="剧集列表" name="1">
           <div class="button-content">
             <xk-button
@@ -38,6 +38,7 @@
             >
           </div>
         </xk-collapse-item>
+      </xk-collapse>
     </div>
   </div>
 </template>
@@ -47,7 +48,6 @@ import xkControl from "../control/index";
 import xkLoading from "../loading/index";
 import xkCollapse from "../collapse/index";
 import xkButton from "../button/index";
-import xkCollapse from '../collapse/index';
 
 export default {
   name: "xkVideo",
@@ -56,7 +56,6 @@ export default {
     xkLoading,
     xkCollapse,
     xkButton,
-    xkCollapse
   },
   props: {
     /**
