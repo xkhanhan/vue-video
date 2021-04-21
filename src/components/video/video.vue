@@ -24,8 +24,10 @@
       <!-- 控件 -->
       <xk-control class="control-content" :class="{ move: show }"></xk-control>
     </div>
-    <div class="video-list">
-      <!-- <xk-list :data="srcList"></xk-list> -->
+    <div class="list-barrage">
+      <xk-collapse>
+        
+      </xk-collapse>
     </div>
   </div>
 </template>
@@ -33,14 +35,14 @@
 <script>
 import xkControl from "../control/index";
 import xkLoading from "../loading/index";
-// import xkList from "../list/index";
+import xkCollapse from '../collapse/index';
 
 export default {
   name: "xkVideo",
   components: {
     xkControl,
     xkLoading,
-    // xkList,
+    xkCollapse
   },
   props: {
     /**
@@ -222,7 +224,7 @@ export default {
     handlePlay() {
       if (this.allTime == 0) return;
       this.videoDom.play();
-      this.isPlay = true;
+      this.isPlay = true; 
     },
     handlePause() {
       this.videoDom.pause();
