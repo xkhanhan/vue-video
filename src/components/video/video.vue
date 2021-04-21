@@ -24,8 +24,21 @@
       <!-- 控件 -->
       <xk-control class="control-content" :class="{ move: show }"></xk-control>
     </div>
-    <div class="video-list">
-      <!-- <xk-list :data="srcList"></xk-list> -->
+    <div class="list-barrage">
+      <xk-collapse v-model="activeList"  v-if='isNext'>
+        <xk-collapse-item title="剧集列表" name="1">
+          <div class="button-content">
+            <xk-button
+              class="button"
+              size="small"
+              v-for="(item, index) in srcList"
+              :key="index"
+              @click="handleButton(index)"
+              >{{ index + 1 }}</xk-button
+            >
+          </div>
+        </xk-collapse-item>
+      </xk-collapse>
     </div>
   </div>
 </template>
@@ -33,14 +46,16 @@
 <script>
 import xkControl from "../control/index";
 import xkLoading from "../loading/index";
-// import xkList from "../list/index";
+import xkCollapse from "../collapse/index";
+import xkButton from "../button/index";
 
 export default {
   name: "xkVideo",
   components: {
     xkControl,
     xkLoading,
-    // xkList,
+    xkCollapse,
+    xkButton,
   },
   props: {
     /**
@@ -81,6 +96,8 @@ export default {
       moveTimeout: null,
 
       loading: false,
+
+      activeList: ["1"],
     };
   },
   created() {
@@ -281,6 +298,9 @@ export default {
     handleLeave() {
       this.show = false;
     },
+    handleButton(e) {
+      this.index = e;
+    },
   },
   destroyed() {
     clearInterval(this.moveTimeout);
@@ -294,14 +314,12 @@ export default {
 
 <style scoped>
 @import url("../../css/iconfont.css");
-/* .video{
+.video {
   display: flex;
-
-} */
-
+  box-sizing: border-box;
+}
 .video-content {
-  width: 100%;
-  height: 100%;
+  flex: 2;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -310,8 +328,20 @@ export default {
   overflow: hidden;
   position: relative;
   color: #fff;
+  margin: 10px;
 }
-
+.list-barrage {
+  flex: 1;
+  margin: 10px;
+}
+.button-content {
+  display: flex;
+  flex-wrap: wrap;
+}
+.button-content .button{
+  margin: 5px 5px;
+  width: calc(100% / 5 - 10px);
+}
 /**
     头部信息的样式
  */
