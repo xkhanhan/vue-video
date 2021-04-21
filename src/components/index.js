@@ -7,7 +7,7 @@ import xkProgress from './progress/index';
 import xkVideo from './video/index';
 import xkControl from './control/index';
 import xkLoading from './loading/index';
-import xkList from './list/index';
+import xkButton from './button/index'
 
 const components = [
     xkCollapse,
@@ -16,7 +16,7 @@ const components = [
     xkVideo,
     xkControl,
     xkLoading,
-    xkList
+    xkButton
 ]
 
 /**
