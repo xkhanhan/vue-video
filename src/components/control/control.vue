@@ -31,7 +31,19 @@
       </div>
       <div class="control-right">
         <div class="video-clarity">720p高清</div>
-        <div class="video-speed">倍速</div>
+        <div class="video-speed">
+          <span>倍速</span>
+          <ul class="speed-button">
+            <li
+              v-for="item in speedList"
+              :key="item"
+              :class="{ actvie: video.speed == item }"
+              @click="handleSpeed(item)"
+            >
+              {{ item }}x
+            </li>
+          </ul>
+        </div>
         <div class="video-voice">
           <div class="iconfont voice" @click="handleVoice"></div>
           <xk-progress
@@ -79,12 +91,17 @@ export default {
       default: false,
     },
   },
+  data() {
+    return {
+      speedList: [3, 2, 1, 0.5, 0.25],
+    };
+  },
   mounted() {
     window.onkeydown = (e) => {
       console.log(e);
       switch (e.keyCode) {
         case 27: //esc
-          this.video.isScreen = false
+          this.video.isScreen = false;
           break;
         case 32: // space
           this.handlePlay();
@@ -149,7 +166,9 @@ export default {
     changeProgress(e) {
       this.video.validation("changeProgress", "progress", e);
     },
-
+    handleSpeed(e){
+      this.video.validation("handleSpeed", "", e);
+    },
     /**
      * 格式化时间方法
      * @return {String} xx:xx
@@ -168,9 +187,9 @@ export default {
       return minutes + ":" + seconds; // xx：xx
     },
   },
-  beforeDestroy(){
-     window.onkeydown = null;
-  }
+  beforeDestroy() {
+    window.onkeydown = null;
+  },
 };
 </script>
 
@@ -243,5 +262,34 @@ export default {
 
 .video-progress:hover .progress-bg {
   height: 7px;
+}
+
+.video-speed {
+  position: relative;
+}
+.video-speed:hover .speed-button {
+  display: block;
+}
+.video-speed .speed-button {
+  position: absolute;
+  bottom: 30px;
+  left: -10px;
+  background: #000;
+}
+.video-speed .speed-button {
+  display: none;
+  height: auto;
+  width: 50px;
+}
+.video-speed .speed-button li {
+  line-height: 30px;
+  text-align: center;
+  height: 30px;
+  width: 100%;
+  transition: 0.5s;
+}
+.speed-button li:hover,
+.speed-button li.active {
+  background: #00a1d6;
 }
 </style>

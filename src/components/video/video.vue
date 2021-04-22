@@ -98,6 +98,7 @@ export default {
       loading: false,
 
       activeList: ["1"],
+      speed:1
     };
   },
   created() {
@@ -276,7 +277,10 @@ export default {
       this.nowTime = e;
       this.videoDom.currentTime = e;
     },
-
+    handleSpeed(e){
+      this.speed = e;
+      this.videoDom.playbackRat = e;
+    },
     /**
      * 以下为鼠标移出，移入视频时，控件的显示方法
      */
