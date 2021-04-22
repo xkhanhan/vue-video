@@ -238,7 +238,6 @@ export default {
      * 以下均为控件事件
      */
     handlePlay() {
-      if (this.allTime == 0) return;
       this.videoDom.play();
       this.isPlay = true; 
     },

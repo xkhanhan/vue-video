@@ -42,7 +42,7 @@ export default {
       srcList: [
         {
           src: "xxxx",
-          title: "2021-04-17",
+          title: "2021-04-01",
           barrage: [{
             user : {
               
@@ -58,7 +58,7 @@ export default {
         },
          {
           src: "xxxx",
-          title: "2021-04-17",
+          title: "2021-04-02",
           barrage: [{
             user : {
               
@@ -74,7 +74,7 @@ export default {
         },
          {
           src: "xxxx",
-          title: "2021-04-17",
+          title: "2021-04-03",
           barrage: [{
             user : {
               
@@ -90,7 +90,7 @@ export default {
         },
          {
           src: "xxxx",
-          title: "2021-04-17",
+          title: "2021-04-04",
           barrage: [{
             user : {
               
@@ -106,7 +106,7 @@ export default {
         },
          {
           src: "xxxx",
-          title: "2021-04-17",
+          title: "2021-04-05",
           barrage: [{
             user : {
               
@@ -120,149 +120,7 @@ export default {
             }
           }],
         },
-         {
-          src: "xxxx",
-          title: "2021-04-17",
-          barrage: [{
-            user : {
-              
-            },
-            time : '2021-04-01',
-            body : 'xxxxxxxxxxx',
-            position : 'top||bottom||static',
-            style : {
-              color : 'red',
-              fontSize : '18px',
-            }
-          }],
-        },
-         {
-          src: "xxxx",
-          title: "2021-04-17",
-          barrage: [{
-            user : {
-              
-            },
-            time : '2021-04-01',
-            body : 'xxxxxxxxxxx',
-            position : 'top||bottom||static',
-            style : {
-              color : 'red',
-              fontSize : '18px',
-            }
-          }],
-        },
-         {
-          src: "xxxx",
-          title: "2021-04-17",
-          barrage: [{
-            user : {
-              
-            },
-            time : '2021-04-01',
-            body : 'xxxxxxxxxxx',
-            position : 'top||bottom||static',
-            style : {
-              color : 'red',
-              fontSize : '18px',
-            }
-          }],
-        },
-         {
-          src: "xxxx",
-          title: "2021-04-17",
-          barrage: [{
-            user : {
-              
-            },
-            time : '2021-04-01',
-            body : 'xxxxxxxxxxx',
-            position : 'top||bottom||static',
-            style : {
-              color : 'red',
-              fontSize : '18px',
-            }
-          }],
-        },
-         {
-          src: "xxxx",
-          title: "2021-04-17",
-          barrage: [{
-            user : {
-              
-            },
-            time : '2021-04-01',
-            body : 'xxxxxxxxxxx',
-            position : 'top||bottom||static',
-            style : {
-              color : 'red',
-              fontSize : '18px',
-            }
-          }],
-        },
-         {
-          src: "xxxx",
-          title: "2021-04-17",
-          barrage: [{
-            user : {
-              
-            },
-            time : '2021-04-01',
-            body : 'xxxxxxxxxxx',
-            position : 'top||bottom||static',
-            style : {
-              color : 'red',
-              fontSize : '18px',
-            }
-          }],
-        },
-          {
-          src: "xxxx",
-          title: "2021-04-17",
-          barrage: [{
-            user : {
-              
-            },
-            time : '2021-04-01',
-            body : 'xxxxxxxxxxx',
-            position : 'top||bottom||static',
-            style : {
-              color : 'red',
-              fontSize : '18px',
-            }
-          }],
-        },
-          {
-          src: "xxxx",
-          title: "2021-04-17",
-          barrage: [{
-            user : {
-              
-            },
-            time : '2021-04-01',
-            body : 'xxxxxxxxxxx',
-            position : 'top||bottom||static',
-            style : {
-              color : 'red',
-              fontSize : '18px',
-            }
-          }],
-        },  {
-          src: "xxxx",
-          title: "2021-04-17",
-          barrage: [{
-            user : {
-              
-            },
-            time : '2021-04-01',
-            body : 'xxxxxxxxxxx',
-            position : 'top||bottom||static',
-            style : {
-              color : 'red',
-              fontSize : '18px',
-            }
-          }],
-        },
+        
       ],
     };
   },
