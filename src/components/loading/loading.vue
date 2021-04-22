@@ -61,7 +61,7 @@ export default {
   background-color: #00a1d6;
 
   animation-name: loading;
-  animation-duration: 2s;
+  animation-duration: 1.5s;
   animation-direction: alternate;
   animation-iteration-count: infinite;
 }
