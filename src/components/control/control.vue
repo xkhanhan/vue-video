@@ -37,7 +37,7 @@
             <li
               v-for="item in speedList"
               :key="item"
-              :class="{ actvie: video.speed == item }"
+              :class="{ active: video.speed == item }"
               @click="handleSpeed(item)"
             >
               {{ item }}x
@@ -272,7 +272,7 @@ export default {
 }
 .video-speed .speed-button {
   position: absolute;
-  bottom: 30px;
+  bottom: 29px;
   left: -10px;
   background: #000;
 }
