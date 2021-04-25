@@ -18,7 +18,12 @@
         autobuffer
         :src="src"
       ></video>
+
+      <!-- loading -->
       <xk-loading v-show="loading"></xk-loading>
+
+      <!-- 弹幕 -->
+      <xk-barrage v-if="barrage"></xk-barrage>
 
       <!-- 控件 -->
       <xk-control class="control-content" :class="{ move: show }"></xk-control>
@@ -28,12 +33,15 @@
 <script>
 import xkControl from "../control/index";
 import xkLoading from "../loading/index";
+import xkBarrage from '../barrage/index';
 
 export default {
   name: "xkVideo",
+  
   components: {
     xkControl,
     xkLoading,
+    xkBarrage
   },
   props: {
     /**
@@ -47,6 +55,12 @@ export default {
     isNext: {
       type : Boolean,
       default : false
+    },
+    barrage:{
+      type : Array,
+      default () {
+        return []
+      }
     }
   },
   provide() {
@@ -301,6 +315,7 @@ export default {
   z-index: 99;
   left: 0px;
   opacity: 0;
+  z-index: 999;
 }
 
 .video-header.move {
