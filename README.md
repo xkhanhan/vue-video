@@ -253,5 +253,6 @@
 |  否  | circle  |    园    | String |  false  |                -                 |
 |  否  | rounded |   圆角   | String |  false  |                -                 |
 |  否  |  icon   | ico 图标 | String |    -    |                -                 |
+
 #### 事件
 
