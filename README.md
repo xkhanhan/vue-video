@@ -7,21 +7,6 @@
 3. 此项目目前在开发阶段，请勿用于商业用途，仅提供学习交流
 4. 如果有任何想法（例如：你觉得这代码写的真low，想吐槽作者），欢迎发送至邮箱 142774255@gmail.com
 
-## 项目下载
-
-``` shell
-npm install xk
-```
-
-## 项目引入
-
-``` js
-import Vue from 'vue';
-import xkUI from 'xk';
-
-Vue.use(xk);
-```
-
 
 
 ## 组件
