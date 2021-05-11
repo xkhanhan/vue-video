@@ -27,121 +27,50 @@
         </div>
       </xk-collapse-item>
     </xk-collapse> -->
-    <xk-video class="video" isNext :videoObject="srcList[1]" @deal="deal" />
+    <xk-video class="video" isNext :videoObject="srcList[0]" @deal="deal" />
     <!-- <xk-button size="medium" >默认按钮</xk-button> -->
   </div>
 </template>
 
 <script>
 export default {
-  components:{
-  },
+  components: {},
   name: "App",
   data() {
     return {
       srcList: [
         {
-          src: "xxxx",
-          title: "2021-04-01",
-          barrage: [{
-            user : {
-              
+          src: require("./assets/选奶救不了队友的亮眼表现_20-07-31_22-37-39.mp4"),
+          title: "选奶救不了队友的亮眼表现_20-07-31_22-37-39",
+          barrage: [
+            {
+              user: {},
+              time: "2021-04-01",
+              body: "xxxxxxxxxxx",
+              position: "top||bottom||static",
+              style: {
+                color: "red",
+                fontSize: "18px",
+              },
             },
-            time : '2021-04-01',
-            body : 'xxxxxxxxxxx',
-            position : 'top||bottom||static',
-            style : {
-              color : 'red',
-              fontSize : '18px',
-            }
-          }],
+          ],
         },
-         {
-          src: "xxxx",
-          title: "2021-04-02",
-          barrage: [{
-            user : {
-              
-            },
-            time : '2021-04-01',
-            body : 'xxxxxxxxxxx',
-            position : 'top||bottom||static',
-            style : {
-              color : 'red',
-              fontSize : '18px',
-            }
-          }],
-        },
-         {
-          src: "xxxx",
-          title: "2021-04-03",
-          barrage: [{
-            user : {
-              
-            },
-            time : '2021-04-01',
-            body : 'xxxxxxxxxxx',
-            position : 'top||bottom||static',
-            style : {
-              color : 'red',
-              fontSize : '18px',
-            }
-          }],
-        },
-         {
-          src: "xxxx",
-          title: "2021-04-04",
-          barrage: [{
-            user : {
-              
-            },
-            time : '2021-04-01',
-            body : 'xxxxxxxxxxx',
-            position : 'top||bottom||static',
-            style : {
-              color : 'red',
-              fontSize : '18px',
-            }
-          }],
-        },
-         {
-          src: "xxxx",
-          title: "2021-04-05",
-          barrage: [{
-            user : {
-              
-            },
-            time : '2021-04-01',
-            body : 'xxxxxxxxxxx',
-            position : 'top||bottom||static',
-            style : {
-              color : 'red',
-              fontSize : '18px',
-            }
-          }],
-        },
-        
       ],
     };
   },
-  methods : {
-    deal(next){
+  methods: {
+    deal(next) {
       console.log(next);
-    }
-  }
+    },
+  },
 };
 </script>
 
 <style>
-@import url('./css/index.css');
+@import url("./css/index.css");
 
-#app, .video {
-  margin: 0 auto;
-  min-width: 1000px;
-  max-width: 1200px;
-  width: 100%;
-  height: 600px;
+#app {
+  width: 1000px;
+  height: 500px;
 }
-
-
 </style>
