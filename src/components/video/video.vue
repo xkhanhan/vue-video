@@ -23,8 +23,8 @@
     <xk-loading v-show="loading"></xk-loading>
 
     <!-- 弹幕 -->
-    <!-- <xk-barrage v-if="barrage"></xk-barrage> -->
-
+    <!-- <xk-barrage v-if="barrage" :barrageList="barrageList"></xk-barrage> -->
+    
     <!-- 控件 -->
     <xk-control class="control-content" :class="{ move: show }"></xk-control>
   </div>
@@ -41,7 +41,7 @@ export default {
   components: {
     xkControl,
     xkLoading,
-    // xkBarrage, 
+    // xkBarrage,
   },
   props: {
     /**
@@ -70,6 +70,7 @@ export default {
   },
   data() {
     return {
+      src: this.videoObject.src, // 视频路径
       isPlay: false, // 是否播放
       videoDom: null, // video 标签
 
@@ -95,6 +96,11 @@ export default {
       loading: false, // 加载动画
 
       speed: 1, // 倍速
+      barrageList : [
+        {value : 'xxxx', time : 10},
+        {value : 'xxxx', time : 20},
+        {value : 'xxxx', time : 30}
+      ]
     };
   },
   mounted() {
@@ -211,6 +217,13 @@ export default {
       return Math.floor(e) >= this.limit;
     },
 
+    handleVideo() {
+      if (this.isPlay) {
+        this.validation("handlePause", "pause");
+      } else {
+        this.validation("handlePlay", "play", this.nowTime);
+      }
+    },
     /**
      * 以下均为控件事件
      */

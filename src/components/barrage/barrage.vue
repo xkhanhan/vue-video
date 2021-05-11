@@ -21,7 +21,7 @@ class Barrage {
 
     this.init();
   }
-  
+
   init() {
     const { x, y, spanWidth } = this.create(
       this.canvas,
@@ -32,7 +32,7 @@ class Barrage {
     this.y = y;
 
     if (this.x < -spanWidth) return;
-    this.render(x, y, this.value, this.style);
+    this.render(200,200, this.value, this.style);
   }
 
   /**
@@ -75,11 +75,17 @@ class Barrage {
    * @param { Number } style 样式
    */
   render(x = 0, y = 0, value, style) {
-    const ctx = this.canvas.getContext();
+    const ctx = this.canvas.getContext('2d');
     ctx.font = style.fontSize;
     ctx.fillStyle = style.color;
-    ctx.fillText(value, x, y);
+    ctx.fillText('xxxxxx', x, y);
   }
+
+  // move(){
+  //     setInterval(() => {
+  //       this.render(this.x - 1, this.y, this.value, this.style)
+  //     }, 100)
+  // }
 }
 
 export default {
@@ -91,6 +97,10 @@ export default {
       default: () => {
         return [];
       },
+    },
+    rolling: {
+      type: Boolean,
+      default: true,
     },
   },
   data() {
@@ -107,9 +117,9 @@ export default {
     this.Barrage = Barrage;
 
     this.canvasBar = this.barrageList.map((item) => {
-      return new Barrage(this.canvas, this.parent, item);
+      const lis = new Barrage(this.canvas, this.parent, item);
+      return lis
     });
-    
     // this.video.videoDom.addEventListener("playing", () => {
     //   this.canvasBar.forEach((item) => {
     //     item.init();
@@ -131,5 +141,6 @@ export default {
 .barrage-content canvas {
   width: 100%;
   height: 100%;
+  z-index: 999;
 }
 </style>
