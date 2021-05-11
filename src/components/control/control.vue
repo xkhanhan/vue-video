@@ -98,7 +98,6 @@ export default {
   },
   mounted() {
     window.onkeydown = (e) => {
-      console.log(e);
       switch (e.keyCode) {
         case 27: //esc
           this.video.isScreen = false;
@@ -108,7 +107,7 @@ export default {
           break;
         case 37: // ←
           this.changeProgress(
-            this.addAndDele(this.video.nowTime, this.video.allTime, -10)
+            this.addAndDele(this.video.nowTime, this.video.allTime, -5)
           );
           break;
         case 38: // ↑
@@ -118,7 +117,7 @@ export default {
           break;
         case 39: // →
           this.changeProgress(
-            this.addAndDele(this.video.nowTime, this.video.allTime, 10)
+            this.addAndDele(this.video.nowTime, this.video.allTime, 5)
           );
           break;
         case 40: // ↓

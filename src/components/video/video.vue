@@ -152,9 +152,6 @@ export default {
     });
   },
   computed: {
-    src() {
-      return this.videoObject.src;
-    }, // 视频路径
     token() {
       return this.videoObject.token || false;
     },
