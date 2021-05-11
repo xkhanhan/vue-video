@@ -1,47 +1,47 @@
 <template>
-    <div
-      class="video-content"
-      ref="content"
-      @mousemove="handleMove"
-      @mouseleave="handleLeave"
-    >
-      <!-- 头部视频信息 -->
-      <div class="video-header" :class="{ move: show }">
-        <div class="title">{{ videoObject.title || "" }}</div>
-      </div>
-
-      <!-- 视频 -->
-      <video
-        @click="handlePlay"
-        width="95%"
-        ref="video"
-        autobuffer
-        :src="src"
-      ></video>
-
-      <!-- loading -->
-      <xk-loading v-show="loading"></xk-loading>
-
-      <!-- 弹幕 -->
-      <xk-barrage v-if="barrage"></xk-barrage>
-
-      <!-- 控件 -->
-      <xk-control class="control-content" :class="{ move: show }"></xk-control>
+  <div
+    class="video-content"
+    ref="content"
+    @mousemove="handleMove"
+    @mouseleave="handleLeave"
+  >
+    <!-- 头部视频信息 -->
+    <div class="video-header" :class="{ move: show }">
+      <div class="title">{{ videoObject.title || "" }}</div>
     </div>
+
+    <!-- 视频 -->
+    <video
+      @click="handleVideo"
+      width="95%"
+      ref="video"
+      autobuffer
+      :src="src"
+    ></video>
+
+    <!-- loading -->
+    <xk-loading v-show="loading"></xk-loading>
+
+    <!-- 弹幕 -->
+    <!-- <xk-barrage v-if="barrage" :barrageList="barrageList"></xk-barrage> -->
+
+    <!-- 控件 -->
+    <xk-control class="control-content" :class="{ move: show }"></xk-control>
+  </div>
 </template>
 
 <script>
 import xkControl from "../control/index";
 import xkLoading from "../loading/index";
-import xkBarrage from '../barrage/index';
+// import xkBarrage from "../barrage/index";
 
 export default {
   name: "xkVideo",
-  
+
   components: {
     xkControl,
     xkLoading,
-    xkBarrage
+    // xkBarrage,
   },
   props: {
     /**
@@ -53,15 +53,15 @@ export default {
     },
 
     isNext: {
-      type : Boolean,
-      default : false
+      type: Boolean,
+      default: false,
     },
-    barrage:{
-      type : Array,
-      default () {
-        return []
-      }
-    }
+    barrage: {
+      type: Array,
+      default() {
+        return [];
+      },
+    },
   },
   provide() {
     return {
@@ -70,7 +70,7 @@ export default {
   },
   data() {
     return {
-      src : this.videoObject.src, // 视频路径
+      src: this.videoObject.src, // 视频路径
       isPlay: false, // 是否播放
       videoDom: null, // video 标签
 
@@ -90,12 +90,17 @@ export default {
       show: false, // 控件和头部是否展示
 
       // 定时器
-      endedTimeout: null, 
+      endedTimeout: null,
       moveTimeout: null,
 
       loading: false, // 加载动画
 
-      speed:1, // 倍速
+      speed: 1, // 倍速
+      barrageList : [
+        {value : 'xxxx', time : 10},
+        {value : 'xxxx', time : 20},
+        {value : 'xxxx', time : 30}
+      ]
     };
   },
   mounted() {
@@ -171,7 +176,7 @@ export default {
        * 使用者可在 deal 钩子中调用传入的函数，并对该函数传入一个 boolean 值，来决定是否进行下一步操作
        */
       if (this.token && name && this.isVisti(e)) {
-        this.src = '';
+        this.src = "";
 
         this.$emit("deal", (boolean) => {
           if (!boolean) {
@@ -196,12 +201,19 @@ export default {
       return Math.floor(e) >= this.limit;
     },
 
+    handleVideo() {
+      if (this.isPlay) {
+        this.validation("handlePause", "pause");
+      } else {
+        this.validation("handlePlay", "play", this.nowTime);
+      }
+    },
     /**
      * 以下均为控件事件
      */
     handlePlay() {
       this.videoDom.play();
-      this.isPlay = true; 
+      this.isPlay = true;
     },
     handlePause() {
       this.videoDom.pause();
@@ -224,7 +236,7 @@ export default {
       this.isScreen = isScreen;
     },
     handleNext() {
-      this.$emit('next');
+      this.$emit("next");
     },
     changeVoice(e) {
       this.nowVoice = e;
@@ -235,7 +247,7 @@ export default {
       this.nowTime = e;
       this.videoDom.currentTime = e;
     },
-    handleSpeed(e){
+    handleSpeed(e) {
       this.speed = e;
       this.videoDom.playbackRat = e;
     },
@@ -280,7 +292,7 @@ export default {
   background-color: #000;
   overflow: hidden;
   position: absolute;
-  left:0;
+  left: 0;
   color: #fff;
   margin: 10px;
 }
