@@ -1,69 +1,66 @@
 <template>
-  <div class="video">
-    <div
-      class="video-content"
-      ref="content"
-      @mousemove="handleMove"
-      @mouseleave="handleLeave"
-    >
-      <!-- 头部视频信息 -->
-      <div class="video-header" :class="{ move: show }">
-        <div class="title">{{ title }}</div>
-      </div>
-
-      <!-- 视频 -->
-      <video
-        @click="handlePlay"
-        width="95%"
-        ref="video"
-        autobuffer
-        :src="videoSrc"
-      ></video>
-      <xk-loading v-show="loading"></xk-loading>
-
-      <!-- 控件 -->
-      <xk-control class="control-content" :class="{ move: show }"></xk-control>
+  <div
+    class="video-content"
+    ref="content"
+    @mousemove="handleMove"
+    @mouseleave="handleLeave"
+  >
+    <!-- 头部视频信息 -->
+    <div class="video-header" :class="{ move: show }">
+      <div class="title">{{ videoObject.title || "" }}</div>
     </div>
-    <div class="list-barrage">
-      <xk-collapse v-model="activeList"  v-if="isNext">
-        <xk-collapse-item title="剧集列表" name="1">
-          <div class="button-content">
-            <xk-button
-              class="button"
-              size="small"
-              v-for="(item, index) in srcList"
-              :key="index"
-              @click="handleButton(index)"
-              >{{ index + 1 }}</xk-button
-            >
-          </div>
-        </xk-collapse-item>
-      </xk-collapse>
-    </div>
+
+    <!-- 视频 -->
+    <video
+      @click="handleVideo"
+      width="95%"
+      ref="video"
+      autobuffer
+      :src="src"
+    ></video>
+
+    <!-- loading -->
+    <xk-loading v-show="loading"></xk-loading>
+
+    <!-- 弹幕 -->
+    <!-- <xk-barrage v-if="barrage" :barrageList="barrageList"></xk-barrage> -->
+
+    <!-- 控件 -->
+    <xk-control class="control-content" :class="{ move: show }"></xk-control>
   </div>
 </template>
 
 <script>
 import xkControl from "../control/index";
 import xkLoading from "../loading/index";
-import xkCollapse from "../collapse/index";
-import xkButton from "../button/index";
+// import xkBarrage from "../barrage/index";
 
 export default {
   name: "xkVideo",
+
   components: {
     xkControl,
     xkLoading,
-    xkCollapse,
-    xkButton,
+    // xkBarrage,
   },
   props: {
     /**
      * 视频播放路径
      */
-    srcList: {
-      type: Array,
+    videoObject: {
+      type: Object,
       required: true,
+    },
+
+    isNext: {
+      type: Boolean,
+      default: false,
+    },
+    barrage: {
+      type: Array,
+      default() {
+        return [];
+      },
     },
   },
   provide() {
@@ -73,8 +70,8 @@ export default {
   },
   data() {
     return {
-      isPlay: false,
-      index: 0, //当前视频路径下标
+      src: this.videoObject.src, // 视频路径
+      isPlay: false, // 是否播放
       videoDom: null, // video 标签
 
       nowTime: 0, // 视频当前时间
@@ -90,24 +87,21 @@ export default {
 
       contentDom: null, // 容器
 
-      show: false,
+      show: false, // 控件和头部是否展示
 
+      // 定时器
       endedTimeout: null,
       moveTimeout: null,
 
-      loading: false,
+      loading: false, // 加载动画
 
-      activeList: ["1"],
-      speed:1
+      speed: 1, // 倍速
+      barrageList : [
+        {value : 'xxxx', time : 10},
+        {value : 'xxxx', time : 20},
+        {value : 'xxxx', time : 30}
+      ]
     };
-  },
-  created() {
-    const { srcList } = this;
-    if (srcList.length == 0) throw Error("请传入视频路径"); // 两个都没有传入报错
-
-    if (srcList.length > 1) {
-      this.isList = true; // 当视频路径数组长度大于1时,渲染下一个按钮和视频列表
-    }
   },
   mounted() {
     const videoDom = this.$refs.video; // 获取视频元素
@@ -153,32 +147,16 @@ export default {
        */
       videoDom.addEventListener("ended", () => {
         this.isPlay = false;
-
-        this.$emit("ended", (boolean = true) => {
-          if (!boolean) {
-            return;
-          } else {
-            this.handleNext();
-          }
-        });
+        this.$emit("ended");
       });
     });
   },
   computed: {
-    videoSrc() {
-      return this.srcList[this.index].src;
-    },
-    title() {
-      return this.srcList[this.index].title;
-    },
     token() {
-      return this.srcList[this.index].token || false;
+      return this.videoObject.token || false;
     },
     limit() {
-      return this.srcList[this.index].limit || 0;
-    },
-    isNext() {
-      return this.srcList.length > 1;
+      return this.videoObject.limit || 0;
     },
   },
   methods: {
@@ -198,24 +176,13 @@ export default {
        * 使用者可在 deal 钩子中调用传入的函数，并对该函数传入一个 boolean 值，来决定是否进行下一步操作
        */
       if (this.token && name && this.isVisti(e)) {
-        let index = this.index; // 暂存当前视频下标
-
-        /**
-         * 传入一个空的视频地址，防止控制台命令播放视频
-         */
-        this.srcList.push({
-          src: "",
-          title: "",
-        });
-
-        this.index = this.srcList.length - 1; // 使用空视频地址
+        this.src = "";
 
         this.$emit("deal", (boolean) => {
           if (!boolean) {
             return;
           } else {
-            this.srcList.pop(); // 删除空地址
-            this.index = index; // 使用被限制的视频地址
+            this.src = this.videoObject.src;
             this[callckName](e); // 进行下一步控件
           }
         });
@@ -234,12 +201,19 @@ export default {
       return Math.floor(e) >= this.limit;
     },
 
+    handleVideo() {
+      if (this.isPlay) {
+        this.validation("handlePause", "pause");
+      } else {
+        this.validation("handlePlay", "play", this.nowTime);
+      }
+    },
     /**
      * 以下均为控件事件
      */
     handlePlay() {
       this.videoDom.play();
-      this.isPlay = true; 
+      this.isPlay = true;
     },
     handlePause() {
       this.videoDom.pause();
@@ -261,11 +235,8 @@ export default {
       else document.exitFullscreen();
       this.isScreen = isScreen;
     },
-    handleNext(value = 1) {
-      let { index, srcList } = this;
-      let now = (srcList.length + (index + value)) % srcList.length;
-
-      this.index = now;
+    handleNext() {
+      this.$emit("next");
     },
     changeVoice(e) {
       this.nowVoice = e;
@@ -276,7 +247,7 @@ export default {
       this.nowTime = e;
       this.videoDom.currentTime = e;
     },
-    handleSpeed(e){
+    handleSpeed(e) {
       this.speed = e;
       this.videoDom.playbackRat = e;
     },
@@ -301,9 +272,6 @@ export default {
     handleLeave() {
       this.show = false;
     },
-    handleButton(e) {
-      this.index = e;
-    },
   },
   destroyed() {
     clearInterval(this.moveTimeout);
@@ -317,33 +285,16 @@ export default {
 
 <style scoped>
 @import url("../../css/iconfont.css");
-.video {
-  display: flex;
-  box-sizing: border-box;
-}
 .video-content {
-  flex: 2;
-  display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   background-color: #000;
   overflow: hidden;
-  position: relative;
+  position: absolute;
+  left: 0;
   color: #fff;
   margin: 10px;
-}
-.list-barrage {
-  flex: 1;
-  margin: 10px;
-}
-.button-content {
-  display: flex;
-  flex-wrap: wrap;
-}
-.button-content .button{
-  margin: 5px 5px;
-  width: calc(100% / 5 - 10px);
 }
 /**
     头部信息的样式
@@ -376,6 +327,7 @@ export default {
   z-index: 99;
   left: 0px;
   opacity: 0;
+  z-index: 999;
 }
 
 .video-header.move {

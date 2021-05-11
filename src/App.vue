@@ -27,7 +27,7 @@
         </div>
       </xk-collapse-item>
     </xk-collapse> -->
-    <xk-video class="video"  :srcList="srcList" @deal="deal" />
+    <xk-video class="video" isNext :videoObject="srcList[1]" @deal="deal" />
     <!-- <xk-button size="medium" >默认按钮</xk-button> -->
   </div>
 </template>
@@ -139,6 +139,8 @@ export default {
   margin: 0 auto;
   min-width: 1000px;
   max-width: 1200px;
+  width: 100%;
+  height: 600px;
 }
 
 
