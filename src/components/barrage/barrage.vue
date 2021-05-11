@@ -109,12 +109,12 @@ export default {
     this.canvasBar = this.barrageList.map((item) => {
       return new Barrage(this.canvas, this.parent, item);
     });
-
-    this.video.addEventListener("playing", () => {
-      this.canvasBar.forEach((item) => {
-        item.init();
-      });
-    });
+    
+    // this.video.videoDom.addEventListener("playing", () => {
+    //   this.canvasBar.forEach((item) => {
+    //     item.init();
+    //   });
+    // });
   },
 };
 </script>
