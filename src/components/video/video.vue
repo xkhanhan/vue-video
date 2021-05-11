@@ -1,47 +1,47 @@
 <template>
-    <div
-      class="video-content"
-      ref="content"
-      @mousemove="handleMove"
-      @mouseleave="handleLeave"
-    >
-      <!-- 头部视频信息 -->
-      <div class="video-header" :class="{ move: show }">
-        <div class="title">{{ videoObject.title || "" }}</div>
-      </div>
-
-      <!-- 视频 -->
-      <video
-        @click="handlePlay"
-        width="95%"
-        ref="video"
-        autobuffer
-        :src="src"
-      ></video>
-
-      <!-- loading -->
-      <xk-loading v-show="loading"></xk-loading>
-
-      <!-- 弹幕 -->
-      <xk-barrage v-if="barrage"></xk-barrage>
-
-      <!-- 控件 -->
-      <xk-control class="control-content" :class="{ move: show }"></xk-control>
+  <div
+    class="video-content"
+    ref="content"
+    @mousemove="handleMove"
+    @mouseleave="handleLeave"
+  >
+    <!-- 头部视频信息 -->
+    <div class="video-header" :class="{ move: show }">
+      <div class="title">{{ videoObject.title || "" }}</div>
     </div>
+
+    <!-- 视频 -->
+    <video
+      @click="play = !isPlay"
+      width="95%"
+      ref="video"
+      autobuffer
+      :src="src"
+    ></video>
+
+    <!-- loading -->
+    <xk-loading v-show="loading"></xk-loading>
+
+    <!-- 弹幕 -->
+    <!-- <xk-barrage v-if="barrage"></xk-barrage> -->
+
+    <!-- 控件 -->
+    <xk-control class="control-content" :class="{ move: show }"></xk-control>
+  </div>
 </template>
 
 <script>
 import xkControl from "../control/index";
 import xkLoading from "../loading/index";
-import xkBarrage from '../barrage/index';
+// import xkBarrage from "../barrage/index";
 
 export default {
   name: "xkVideo",
-  
+
   components: {
     xkControl,
     xkLoading,
-    xkBarrage
+    // xkBarrage, 
   },
   props: {
     /**
@@ -53,15 +53,15 @@ export default {
     },
 
     isNext: {
-      type : Boolean,
-      default : false
+      type: Boolean,
+      default: false,
     },
-    barrage:{
-      type : Array,
-      default () {
-        return []
-      }
-    }
+    barrage: {
+      type: Array,
+      default() {
+        return [];
+      },
+    },
   },
   provide() {
     return {
@@ -70,7 +70,6 @@ export default {
   },
   data() {
     return {
-      src : this.videoObject.src, // 视频路径
       isPlay: false, // 是否播放
       videoDom: null, // video 标签
 
@@ -90,12 +89,12 @@ export default {
       show: false, // 控件和头部是否展示
 
       // 定时器
-      endedTimeout: null, 
+      endedTimeout: null,
       moveTimeout: null,
 
       loading: false, // 加载动画
 
-      speed:1, // 倍速
+      speed: 1, // 倍速
     };
   },
   mounted() {
@@ -147,12 +146,27 @@ export default {
     });
   },
   computed: {
+    src() {
+      return this.videoObject.src;
+    }, // 视频路径
     token() {
       return this.videoObject.token || false;
     },
     limit() {
       return this.videoObject.limit || 0;
     },
+    play:{
+      set(value) {
+        if(value) {
+         this.validation("handlePlay", "play", this.nowTime);
+        } else {
+           this.validation("handlePause", "pause");
+        }
+      },
+      get() {
+        return this.isPlay;
+      }
+    }
   },
   methods: {
     /**
@@ -171,7 +185,7 @@ export default {
        * 使用者可在 deal 钩子中调用传入的函数，并对该函数传入一个 boolean 值，来决定是否进行下一步操作
        */
       if (this.token && name && this.isVisti(e)) {
-        this.src = '';
+        this.src = "";
 
         this.$emit("deal", (boolean) => {
           if (!boolean) {
@@ -193,6 +207,7 @@ export default {
      */
     isVisti(e) {
       if (!e) return false;
+      if(!this.limit) return false 
       return Math.floor(e) >= this.limit;
     },
 
@@ -200,12 +215,12 @@ export default {
      * 以下均为控件事件
      */
     handlePlay() {
+      this.isPlay = true;
       this.videoDom.play();
-      this.isPlay = true; 
     },
     handlePause() {
+       this.isPlay = false;
       this.videoDom.pause();
-      this.isPlay = false;
     },
     handleVoice() {
       let isMute = !this.isMute;
@@ -224,7 +239,7 @@ export default {
       this.isScreen = isScreen;
     },
     handleNext() {
-      this.$emit('next');
+      this.$emit("next");
     },
     changeVoice(e) {
       this.nowVoice = e;
@@ -235,9 +250,9 @@ export default {
       this.nowTime = e;
       this.videoDom.currentTime = e;
     },
-    handleSpeed(e){
+    handleSpeed(e) {
       this.speed = e;
-      this.videoDom.playbackRat = e;
+      this.videoDom.playbackRate = e;
     },
     /**
      * 以下为鼠标移出，移入视频时，控件的显示方法
@@ -274,16 +289,20 @@ export default {
 <style scoped>
 @import url("../../css/iconfont.css");
 .video-content {
+  width: 100%;
+  height: 100%;
+  display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   background-color: #000;
   overflow: hidden;
-  position: absolute;
-  left:0;
+  position: relative;
+  left: 0;
   color: #fff;
   margin: 10px;
 }
+
 /**
     头部信息的样式
  */
